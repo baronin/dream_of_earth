@@ -35,6 +35,7 @@ module.exports = {
     "prefer-destructuring": "off",
     "no-use-before-define": "off",
     "react/display-name": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     // "no-restricted-imports": ["error", { patterns: ["../*"] }],
     // "filenames/match-regex": [2, "^[a-z._-]+$", true],
   },
