@@ -1,23 +1,35 @@
 import { GetServerSideProps } from "next";
+import { QueryClient, useQueryClient } from "react-query";
+import { dehydrate } from "react-query/hydration";
 
-import videosList from "../mock/videos-list.json";
-import { VimeoVideo } from "../model/Vimeo";
+import { Dream } from "../model/Vimeo";
 import styles from "../styles/Home.module.css";
+import { apiGetAmbassadorDreams, apiGetDreams } from "../utilities/api/videos";
 
-const Home: React.FC<{
-  featuredVideo: VimeoVideo[];
-  videos: VimeoVideo[];
-}> = (props) => {
-  console.log(props);
+const Home: React.FC = () => {
+  const queryClient = useQueryClient();
+  const featuredVideos = queryClient.getQueryData<Dream[]>("ambassadorDreams");
+  const videos = queryClient.getQueryData<Dream[]>("dreams");
 
-  return <div className={styles.container} />;
+  return (
+    <div className={styles.container}>
+      <p>{featuredVideos?.[0].id}</p>
+      <p>{featuredVideos?.[0].sentBy}</p>
+      <p>{featuredVideos?.[0].location}</p>
+      <p>{videos?.[0].id}</p>
+    </div>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery("ambassadorDreams", apiGetAmbassadorDreams);
+  await queryClient.prefetchQuery("dreams", apiGetDreams);
+
   return {
     props: {
-      featuredVideo: videosList,
-      videos: videosList,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };

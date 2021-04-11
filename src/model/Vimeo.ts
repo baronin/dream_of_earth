@@ -1,36 +1,42 @@
 /* eslint-disable camelcase,@typescript-eslint/no-explicit-any */
-export interface VimeoVideo {
-  uri: string;
-  name: string;
-  description: null;
-  type: string;
-  link: string;
-  duration: number;
-  width: number;
-  language: null;
-  height: number;
-  embed: Embed;
-  created_time: Date;
-  modified_time: Date;
-  release_time: Date;
-  content_rating: string[];
-  license: null;
-  privacy: Privacy;
-  pictures: Pictures;
-  tags: any[];
-  stats: Stats;
-  categories: any[];
-  metadata: VimeoVideoMetadata;
-  user: User;
-  parent_folder: null;
-  last_user_action_event_date: Date;
-  review_page: ReviewPage;
-  app: App;
-  status: string;
-  resource_key: string;
-  upload: Upload;
-  transcode: Transcode;
-  is_playable: boolean;
+export interface Dream {
+  id: string;
+  sentBy: string;
+  likesCount: number;
+  location: number;
+  video: {
+    uri: string;
+    name: string;
+    description: null;
+    type: string;
+    link: string;
+    duration: number;
+    width: number;
+    language: null;
+    height: number;
+    embed: Embed;
+    created_time: Date;
+    modified_time: Date;
+    release_time: Date;
+    content_rating: string[];
+    license: null;
+    privacy: Privacy;
+    pictures: Pictures;
+    tags: any[];
+    stats: Stats;
+    categories: any[];
+    metadata: VimeoVideoMetadata;
+    user: User;
+    parent_folder: null;
+    last_user_action_event_date: Date;
+    review_page: ReviewPage;
+    app: App;
+    status: string;
+    resource_key: string;
+    upload: Upload;
+    transcode: Transcode;
+    is_playable: boolean;
+  };
 }
 
 export interface App {
