@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "tsc && eslint . --ext .ts,.tsx"
+    "lint": "tsc && eslint . --ext .ts,.tsx --fix"
   },
   "dependencies": {
     "next": "10.1.3",
