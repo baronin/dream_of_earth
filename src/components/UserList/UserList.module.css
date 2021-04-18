@@ -1,0 +1,14 @@
+.selectWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.select {
+  margin-right: 15px;
+  margin-left: 15px;
+  padding: 15px;
+  color: white;
+  background-color: transparent;
+  border: 1px solid #fff;
+  border-radius: 5px;
+}
