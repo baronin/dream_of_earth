@@ -1,0 +1,11 @@
+.userCart {
+  width: calc(100% / 6);
+  padding: 3px;
+}
+
+.userCartInner {
+  height: 283px;
+  border: 1px solid #fff;
+  box-sizing: border-box;
+  border-radius: 6px;
+}
