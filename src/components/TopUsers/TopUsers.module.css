@@ -1,0 +1,6 @@
+.topPeopleInner {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -3px;
+  margin-right: -3px;
+}
