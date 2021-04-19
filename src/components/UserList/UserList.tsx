@@ -1,7 +1,7 @@
 import React from "react";
 
-import css from "./UserList.module.css";
 import UserCart from "../UserCart";
+import css from "./UserList.module.css";
 
 const UserList = () => {
   return (
