@@ -4,6 +4,8 @@
 }
 
 .userCartInner {
+  display: inline-block;
+  width: 100%;
   height: 283px;
   border: 1px solid #fff;
   box-sizing: border-box;

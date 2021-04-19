@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 import css from "./UserCart.module.css";
@@ -5,10 +6,12 @@ import css from "./UserCart.module.css";
 const UserCart = () => {
   return (
     <div className={css.userCart}>
-      <div className={css.userCartInner}>
-        <div>name</div>
-        <div>categories</div>
-      </div>
+      <Link href="#">
+        <a className={css.userCartInner}>
+          <div>name</div>
+          <div>categories</div>
+        </a>
+      </Link>
     </div>
   );
 };
