@@ -1,9 +1,12 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
+import Modal from "../Modal";
 import css from "./Hero.module.css";
 
 const Hero = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
     <section className={css.hero}>
       <div className={`${css.heroContainer} container`}>
@@ -15,11 +18,19 @@ const Hero = () => {
             new.
           </p>
           <Link href="#">
-            <a className={css.shareLink}>Share your dream</a>
+            <a className={css.shareLink} onClick={() => setIsOpen(!isOpen)}>
+              Share your dream
+            </a>
           </Link>
         </div>
         <div className={css.heroEarth} />
       </div>
+      <Modal active={isOpen} setActive={setIsOpen}>
+        <input className={css.nameDream} type="text" placeholder="text" />
+        <h3>Something about Dream for Earth</h3>
+        <p>Deploy offline this discussion for product launch the right info at the right time to the right people.
+          Cloud strategy killing it we need distributors to evangelize the new line to local markets, for exposing new.</p>
+      </Modal>
     </section>
   );
 };
