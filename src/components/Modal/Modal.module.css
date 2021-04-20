@@ -5,7 +5,7 @@
   display: flex;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,.5);
+  background-color: rgba(0,0,0,.4);
   z-index: 100;
   opacity: 0;
   pointer-events: none;
@@ -25,4 +25,5 @@
   padding: 20px;
   text-align: center;
   background-color: rgba(0,0,0,.8);
+  border-radius: 12px;
 }
