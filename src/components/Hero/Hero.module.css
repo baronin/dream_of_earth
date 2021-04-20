@@ -52,7 +52,12 @@
     width: 400px;
 }
 
-.nameDream {
+.label {
+  position: relative;
+  display: flex;
+}
+
+.inputNameDream {
   display: inline-block;
   padding: 20px;
   width: 100%;
@@ -60,4 +65,21 @@
   background: #222222;
   border: none;
   border-radius: 12px;
+  color: #fff;
 }
+
+.btnClose {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+  right: 20px;
+  width: 18px;
+  height: 18px;
+  background: url("../../assets/images/icon-close.svg");
+  border: none;
+}
+
+.btnClose:hover {
+  transform: translateY(-50%) scale(0.9);
+  cursor: pointer;
+ }
