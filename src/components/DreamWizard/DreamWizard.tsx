@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import DreamCategory from "./DreamCategory";
 import DreamType from "./DreamType";
 
-const DreamWizard = () => {
+const DreamWizard: React.FC = () => {
   const [step, setStep] = useState(0);
   const [type, setType] = useState<"Text" | "Video">("Text");
   const [categories, setCategories] = useState<string[]>([]);
@@ -18,11 +18,15 @@ const DreamWizard = () => {
 
   return (
     <div>
+      <div>
+        <button type="button">Back page</button>
+        <p>{step}</p>
+      </div>
       {step === 0 && <DreamType onSelect={onSelectType} />}
       {step === 1 && <DreamCategory onSelect={onSelectCategory} />}
-      {/*<button type="button" onClick={() => console.log("Ivan the best", type, categories)}>
+      {/* <button type="button" onClick={() => console.log("Ivan the best", type, categories)}>
         RIJIK
-      </button>*/}
+      </button> */}
     </div>
   );
 };

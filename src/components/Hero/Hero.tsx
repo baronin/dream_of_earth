@@ -1,12 +1,11 @@
-import Link from "next/link";
 import React, { useState } from "react";
 
+import DreamWizard from "../DreamWizard/DreamWizard";
 import Modal from "../Modal";
 import css from "./Hero.module.css";
-import DreamWizard from "../DreamWizard/DreamWizard";
 
 const Hero = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   return (
     <section className={css.hero}>
@@ -18,11 +17,9 @@ const Hero = () => {
             Cloud strategy killing it we need distributors to evangelize the new line to local markets, for exposing
             new.
           </p>
-          <Link href="#">
-            <a className={css.shareLink} onClick={() => setIsOpen(!isOpen)}>
-              Share your dream
-            </a>
-          </Link>
+          <button type="button" className={css.shareLink} onClick={() => setIsOpen(!isOpen)}>
+            Share your dream
+          </button>
         </div>
         <div className={css.heroEarth} />
       </div>
