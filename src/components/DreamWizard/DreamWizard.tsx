@@ -20,9 +20,9 @@ const DreamWizard = () => {
     <div>
       {step === 0 && <DreamType onSelect={onSelectType} />}
       {step === 1 && <DreamCategory onSelect={onSelectCategory} />}
-      <button type="button" onClick={() => console.log("Ivan the best", type, categories)}>
+      {/*<button type="button" onClick={() => console.log("Ivan the best", type, categories)}>
         RIJIK
-      </button>
+      </button>*/}
     </div>
   );
 };
