@@ -10,19 +10,13 @@ const DreamType = (props: Props) => {
   const { onSelect } = props;
   return (
     <div>
-      <form action="">
-        <label htmlFor="" className={css.label}>
-          <input className={css.inputNameDream} type="text" placeholder="Step 1 / 4" readOnly />
-          <button className={css.btnClose} type="button" />
-        </label>
-      </form>
       <h3>Share your dream</h3>
       <p>
         Deploy offline this discussion for product launch the right info at the right time to the right people. Cloud
         strategy killing it we need distributors to evangelize the new line to local markets, for exposing new.
       </p>
       <h4>SELECT DREAM TYPE</h4>
-      <div className={css.selectWrap}>
+      <div className={css.selectDreamTypeWrap}>
         <button className={css.btnRecordVideo} onClick={() => onSelect("Video")}>
           <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

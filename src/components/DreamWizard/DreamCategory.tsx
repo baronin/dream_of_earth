@@ -17,16 +17,6 @@ const DreamCategory: React.FC<Props> = ({ onSelect }) => {
 
   return (
     <div>
-      <form action="">
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor="" className={css.label}>
-          <button type="button"> Back page </button>
-          <input className={css.inputNameDream} type="text" placeholder="Step 2 / 4" readOnly />
-          <button className={css.btnClose} type="button">
-            Close modal
-          </button>
-        </label>
-      </form>
       <div className={css.categoriesDesc}>
         <h3>What is your dream about?</h3>
         <p>Deploy offline this discussion for product launch the right info at the right time to the.</p>
