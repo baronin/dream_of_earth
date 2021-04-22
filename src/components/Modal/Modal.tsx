@@ -15,7 +15,7 @@ const Modal: React.FC<Props> = ({ active, setActive, children }) => {
     return event.type === "keydown";
   };
   const onClose = (event: MouseEvent | KeyboardEvent) => {
-    if (!(event.target as HTMLDivElement).closest(css.modal)) return;
+    if (!(event.target as HTMLDivElement | HTMLElement).closest(css.modal)) return;
     if (isKeyboardEvent(event) && event.code !== "Escape") return;
     console.log("close modal");
     setActive(false);
@@ -30,7 +30,7 @@ const Modal: React.FC<Props> = ({ active, setActive, children }) => {
       onKeyDown={onClose}
     >
       <div className={css.modal}>
-        <button type="button" onClick={() => setActive(false)}>
+        <button className={css.btnCloseModal} type="button" onClick={() => setActive(false)}>
           Close modal
         </button>
         {children}

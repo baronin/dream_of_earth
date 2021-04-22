@@ -2,9 +2,10 @@ import React, { useState } from "react";
 
 import DreamCategory from "./DreamCategory";
 import DreamType from "./DreamType";
+import css from "./DreamWizard.module.css";
 
 const DreamWizard: React.FC = () => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const [type, setType] = useState<"Text" | "Video">("Text");
   const [categories, setCategories] = useState<string[]>([]);
   const onSelectType = (newType: "Text" | "Video") => {
@@ -18,15 +19,18 @@ const DreamWizard: React.FC = () => {
 
   return (
     <div>
-      <div>
-        <button type="button">Back page</button>
-        <p>{step}</p>
+      <div className={css.step}>
+        {step >= 2 && (
+          <button type="button" className={css.stepBtnBack} onClick={() => setStep(step - 1)}>
+            <svg width="13" height="22" viewBox="0 0 13 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 1L2 11L12 21" stroke="#727272" strokeWidth="2" />
+            </svg>
+          </button>
+        )}
+        <p>Step {step}</p>
       </div>
-      {step === 0 && <DreamType onSelect={onSelectType} />}
-      {step === 1 && <DreamCategory onSelect={onSelectCategory} />}
-      {/* <button type="button" onClick={() => console.log("Ivan the best", type, categories)}>
-        RIJIK
-      </button> */}
+      {step === 1 && <DreamType onSelect={onSelectType} />}
+      {step === 2 && <DreamCategory onSelect={onSelectCategory} />}
     </div>
   );
 };
