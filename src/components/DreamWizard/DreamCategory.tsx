@@ -30,7 +30,12 @@ const DreamCategory: React.FC<Props> = ({ onSelect }) => {
           </label>
         ))}
       </div>
-      <button type="button" onClick={() => onSelect(activeCategories)}>
+      <button
+        className={css.btnNextStep}
+        type="button"
+        onClick={() => onSelect(activeCategories)}
+        disabled={activeCategories.length < 1}
+      >
         Next step
       </button>
     </div>

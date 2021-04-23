@@ -1,4 +1,4 @@
-/* DreamType */
+/* DreamMessage */
 .selectDreamTypeWrap {
   display: flex;
   justify-content: center;
@@ -25,13 +25,13 @@
 .selectDreamTypeWrap svg {
   margin-bottom: 20px;
 }
-/* END DreamType */
+/* END DreamMessage */
 
 /* steps in DreamWizard */
 .step {
   position: relative;
   display: flex;
-  padding: 20px;
+  padding: 17px;
   background: #222222;
   border: none;
   border-radius: 12px;
@@ -41,13 +41,14 @@
   width: 100%;
   margin-top: 0;
   margin-bottom: 0;
-  margin-left: 20px;
   text-align: left;
   font-size: 18px;
   color: #727272;
 }
 
 .stepBtnBack {
+  max-height: 20px;
+  margin-right: 15px;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -55,6 +56,26 @@
 
 .stepBtnBack:hover {
   transform: translateX(-3px);
+}
+
+.btnNextStep {
+  display: inline-block;
+  width: 50%;
+  margin-top: 20px;
+  padding: 10px 50px;
+  color: #fff;
+  background: linear-gradient(93.93deg, #854db1 0%, #3625A3 83.13%, #862B88 106.41%);
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+}
+.btnNextStep:hover {
+  background: linear-gradient(-93.93deg, #862B88 106.41%,#3625A3 83.13%, #8F00FF 0%);
+}
+
+.btnNextStep:disabled {
+  background: #854DB1FF;
+  cursor: not-allowed;
 }
 /* END steps in DreamWizard */
 

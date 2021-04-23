@@ -1,8 +1,7 @@
 import React from "react";
 
 import UserCart from "../UserCart";
-
-import css from "./TopUsers.module.css"
+import css from "./TopUsers.module.css";
 
 const TopUsers = () => {
   return (

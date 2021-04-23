@@ -17,7 +17,6 @@ const Modal: React.FC<Props> = ({ active, setActive, children }) => {
   const onClose = (event: MouseEvent | KeyboardEvent) => {
     if (!(event.target as HTMLDivElement | HTMLElement).closest(css.modal)) return;
     if (isKeyboardEvent(event) && event.code !== "Escape") return;
-    console.log("close modal");
     setActive(false);
   };
 

@@ -1,11 +1,7 @@
 import React from "react";
 
 const DreamText = () => {
-  return (
-    <div>
-
-    </div>
-  );
+  return <div />;
 };
 
 export default DreamText;
