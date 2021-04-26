@@ -24,4 +24,25 @@ export const categories: DreamCategory[] = [
     color: "green",
     imgPath: "",
   },
+  {
+    id: "1332",
+    numberCat: 4,
+    name: "Quality education",
+    color: "red",
+    imgPath: "",
+  },
+  {
+    id: "213",
+    numberCat: 5,
+    name: "Quality education",
+    color: "grey",
+    imgPath: "",
+  },
+  {
+    id: "32",
+    numberCat: 6,
+    name: "Quality education",
+    color: "blue",
+    imgPath: "",
+  },
 ];

@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 
+import { DreamCategory as DreamCategoryType } from "../../../types/dreamCategory";
+import { categories as dreamCategories } from "../../mock/dream-categories";
 import css from "./DreamWizard.module.css";
 
 type Props = {
-  onSelect: (categories: string[]) => void;
+  onSelect: (categories: DreamCategoryType[]) => void;
 };
 
 const DreamCategory: React.FC<Props> = ({ onSelect }) => {
-  const categories = ["No poverty", "zero hunger", "test"];
-  const [activeCategories, setActiveCategories] = useState<string[]>([]);
-  const onToggleCategory = (category: string) => {
-    const filtered = activeCategories.filter((item) => item !== category);
-    if (!activeCategories.includes(category)) filtered.push(category);
+  const [activeCategories, setActiveCategories] = useState<DreamCategoryType[]>([]);
+  const onToggleCategory = (category: DreamCategoryType) => {
+    const filtered = activeCategories.filter((item) => item.id !== category.id);
+    const isThere = activeCategories.find((active) => active.id === category.id);
+    if (!isThere) filtered.push(category);
     setActiveCategories(filtered);
   };
 
@@ -23,10 +25,10 @@ const DreamCategory: React.FC<Props> = ({ onSelect }) => {
         <h4>SELECT YOUR 1-5 CATEGORIES</h4>
       </div>
       <div className={css.categoriesList}>
-        {categories.map((category) => (
-          <label key={category} htmlFor={category}>
-            <input type="checkbox" value={category} id={category} onChange={() => onToggleCategory(category)} />
-            <span>{category}</span>
+        {dreamCategories.map((category) => (
+          <label key={category.id} htmlFor={category.id} style={{ backgroundColor: category.color }}>
+            <input type="checkbox" value={category.id} id={category.id} onChange={() => onToggleCategory(category)} />
+            <span>{category.name}</span>
           </label>
         ))}
       </div>
@@ -34,7 +36,7 @@ const DreamCategory: React.FC<Props> = ({ onSelect }) => {
         className={css.btnNextStep}
         type="button"
         onClick={() => onSelect(activeCategories)}
-        disabled={activeCategories.length < 1}
+        disabled={activeCategories.length < 1 || activeCategories.length >= 6}
       >
         Next step
       </button>

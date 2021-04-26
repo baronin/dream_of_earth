@@ -105,5 +105,30 @@
   border-radius: 2px;
 }
 
-/* END sDreamCategory */
+/* END DreamCategory */
 
+/* DreamText */
+.textWrapTitle {
+  max-width: 416px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.textAreaWrap {
+  display: flex;
+  flex-direction: column;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.textArea {
+  padding: 20px;
+  background: #3D3D3D;
+  border-radius: 7px;
+  color: #A0A0A0;
+}
+
+.textAreaWrap button {
+  width: 100%;
+}
