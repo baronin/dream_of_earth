@@ -5,14 +5,21 @@ import { categories as dreamCategories } from "../../mock/dream-categories";
 import css from "./DreamWizard.module.css";
 
 type Props = {
+  defaultCategories: DreamCategoryType[];
   onSelect: (categories: DreamCategoryType[]) => void;
 };
 
-const DreamCategory: React.FC<Props> = ({ onSelect }) => {
-  const [activeCategories, setActiveCategories] = useState<DreamCategoryType[]>([]);
+const DreamCategory: React.FC<Props> = ({ defaultCategories, onSelect }) => {
+  const [activeCategories, setActiveCategories] = useState<DreamCategoryType[]>(defaultCategories);
+
+  const isActive = (category: DreamCategoryType) => {
+    const has = activeCategories.find((active) => active.id === category.id);
+    return Boolean(has);
+  };
+
   const onToggleCategory = (category: DreamCategoryType) => {
     const filtered = activeCategories.filter((item) => item.id !== category.id);
-    const isThere = activeCategories.find((active) => active.id === category.id);
+    const isThere = isActive(category);
     if (!isThere) filtered.push(category);
     setActiveCategories(filtered);
   };
@@ -27,7 +34,13 @@ const DreamCategory: React.FC<Props> = ({ onSelect }) => {
       <div className={css.categoriesList}>
         {dreamCategories.map((category) => (
           <label key={category.id} htmlFor={category.id} style={{ backgroundColor: category.color }}>
-            <input type="checkbox" value={category.id} id={category.id} onChange={() => onToggleCategory(category)} />
+            <input
+              type="checkbox"
+              checked={isActive(category)}
+              value={category.id}
+              id={category.id}
+              onChange={() => onToggleCategory(category)}
+            />
             <span>{category.name}</span>
           </label>
         ))}

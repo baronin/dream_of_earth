@@ -38,7 +38,7 @@ const DreamWizard: React.FC = () => {
         <p>Step {step}</p>
       </div>
       {step === 1 && <DreamMessage onSelect={onSelectType} />}
-      {step === 2 && <DreamCategory onSelect={onSelectCategory} />}
+      {step === 2 && <DreamCategory onSelect={onSelectCategory} defaultCategories={categories} />}
       {step === 3 && type === "Text" && <DreamText onSelect={onSetTextDream} />}
       {step === 3 && type === "Video" && <DreamVideo />}
     </div>
