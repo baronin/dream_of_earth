@@ -104,7 +104,6 @@
   background-color: red;
   border-radius: 2px;
 }
-
 /* END DreamCategory */
 
 /* DreamText */
@@ -122,6 +121,7 @@
   margin-left: auto;
   margin-right: auto;
 }
+
 .textArea {
   padding: 20px;
   background: #3D3D3D;
@@ -131,4 +131,11 @@
 
 .textAreaWrap button {
   width: 100%;
+}
+/* END DreamText */
+
+/* DreamVideo */
+.previewVideo {
+  background-color: #4E4E4E;
+  border-radius: 7px;
 }
