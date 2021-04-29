@@ -4,27 +4,39 @@ import css from "./DreamWizard.module.css";
 
 const DreamVideo = () => {
   const [playing, setPlaying] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const constraints1 = { video: { width: 1280, height: 720 } };
+  const [mediaRecorder, setMediaRecorder] = useState(null);
   /* {video: {
     width: {min: 340, ideal: 1280, max: 1920},
     height: { min: 452, ideal: 720, max: 1080},
     facingMode: "user" // front camera if u use back camera  u need this condition | facingMode: { exact: "environment" }
   }}
   */
+  function handleSuccess(stream: any, video: Element | null) {
+    setIsDisabled(false);
+    console.log("getUserMedia() got stream:", stream);
+    window.stream = stream;
+
+    if (video) {
+      // eslint-disable-next-line no-param-reassign
+      video.srcObject = stream;
+    }
+  }
 
   const startVideo = () => {
     setPlaying(true);
+    // let options = {mimeType: 'video/webm;codecs=vp9,opus'};
     navigator.mediaDevices
       .getUserMedia(constraints1)
       .then((stream) => {
         const video = document.querySelector(".videoFeed");
-        video.srcObject = stream;
-        video.onloadedmetadata = function (e) {
-          video.play();
-        };
-        console.log("stream", stream);
+        // мmediaRecorder = new MediaRecorder(window.stream, options);
+        handleSuccess(stream, video);
       })
-      .catch((error) => console.log(error));
+      .catch((e) => {
+        console.error("navigator.getUserMedia error:", e);
+      });
     /* getMedia(constraints)
       .then((mediaStream) => {
         const video = document.querySelector('.videoFeed');
@@ -67,11 +79,12 @@ const DreamVideo = () => {
           const tracks = stream.getTracks();
 
           tracks.forEach((track: { stop: () => void }) => {
-            console.log("foreach");
+            console.log("foreach track", track);
+            console.log("stream", stream);
             track.stop();
           });
 
-          video.srcObject = null;
+          // video.srcObject = null;
         })
         .catch((error) => console.log(error));
       console.log("stop video", video);
@@ -82,7 +95,6 @@ const DreamVideo = () => {
       });
       video.srcObject = null; */
     }
-    console.log("stop video");
   };
 
   const recordingTimeMS = 5000;
