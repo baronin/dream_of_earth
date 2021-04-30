@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ElementRef, useState } from "react";
 
 import css from "./DreamWizard.module.css";
 
@@ -30,9 +30,14 @@ const DreamVideo = () => {
     navigator.mediaDevices
       .getUserMedia(constraints1)
       .then((stream) => {
-        const video = document.querySelector(".videoFeed");
-        // мmediaRecorder = new MediaRecorder(window.stream, options);
-        handleSuccess(stream, video);
+        const video: HTMLVideoElement | null = document.querySelector(".videoFeed");
+        if (video) {
+          video.srcObject = stream;
+          video.onloadedmetadata = function (e) {
+            video.play();
+          };
+        }
+        console.log("stream", stream);
       })
       .catch((e) => {
         console.error("navigator.getUserMedia error:", e);
