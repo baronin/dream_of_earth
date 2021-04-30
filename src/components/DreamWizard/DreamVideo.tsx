@@ -1,4 +1,4 @@
-import React, { ElementRef, useState } from "react";
+import React, { ElementRef, useRef, useState } from "react";
 
 import css from "./DreamWizard.module.css";
 
@@ -12,16 +12,17 @@ const DreamVideo = () => {
   }}
   */
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const startVideo = () => {
     setPlaying(true);
     navigator.mediaDevices
       .getUserMedia(constraints1)
       .then((stream) => {
-        const video: HTMLVideoElement | null = document.querySelector(".videoFeed");
-        if (video) {
-          video.srcObject = stream;
-          video.onloadedmetadata = function (e) {
-            video.play();
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.onloadedmetadata = function (e) {
+            videoRef.current?.play();
           };
         }
         console.log("stream", stream);
@@ -122,7 +123,7 @@ const DreamVideo = () => {
       <div className="previewVideo">
         <h2>Preview</h2>
         <h2>Recording</h2>
-        <video id="recording" className="videoFeed" width="160" height="120" controls autoPlay muted />
+        <video ref={videoRef} id="recording" className="videoFeed" width="160" height="120" controls autoPlay muted />
         {playing ? (
           <button id="stopButton" type="button" className="button" onClick={stopVideo}>
             Stop
