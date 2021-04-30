@@ -1,12 +1,12 @@
-import React, { ElementRef, useState } from "react";
+import React, { ElementRef, useRef, useState } from "react";
 
 import css from "./DreamWizard.module.css";
 
+const constraints1: MediaStreamConstraints = { video: { width: 1280, height: 720 } };
+
 const DreamVideo = () => {
   const [playing, setPlaying] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const constraints1 = { video: { width: 1280, height: 720 } };
-  const [mediaRecorder, setMediaRecorder] = useState(null);
+
   /* {video: {
     width: {min: 340, ideal: 1280, max: 1920},
     height: { min: 452, ideal: 720, max: 1080},
@@ -14,7 +14,6 @@ const DreamVideo = () => {
   }}
   */
   function handleSuccess(stream: any, video: Element | null) {
-    setIsDisabled(false);
     console.log("getUserMedia() got stream:", stream);
     window.stream = stream;
 
@@ -24,24 +23,20 @@ const DreamVideo = () => {
     }
   }
 
-  const startVideo = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const startVideo = async () => {
     setPlaying(true);
-    // let options = {mimeType: 'video/webm;codecs=vp9,opus'};
-    navigator.mediaDevices
-      .getUserMedia(constraints1)
-      .then((stream) => {
-        const video: HTMLVideoElement | null = document.querySelector(".videoFeed");
-        if (video) {
-          video.srcObject = stream;
-          video.onloadedmetadata = function (e) {
-            video.play();
-          };
-        }
-        console.log("stream", stream);
-      })
-      .catch((e) => {
-        console.error("navigator.getUserMedia error:", e);
-      });
+
+    const stream = await navigator.mediaDevices.getUserMedia(constraints1);
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+      videoRef.current.onloadedmetadata = () => {
+        videoRef.current?.play();
+      };
+    }
+
     /* getMedia(constraints)
       .then((mediaStream) => {
         const video = document.querySelector('.videoFeed');
@@ -84,8 +79,7 @@ const DreamVideo = () => {
           const tracks = stream.getTracks();
 
           tracks.forEach((track: { stop: () => void }) => {
-            console.log("foreach track", track);
-            console.log("stream", stream);
+            console.log("foreach");
             track.stop();
           });
 
@@ -137,7 +131,7 @@ const DreamVideo = () => {
       <div className="previewVideo">
         <h2>Preview</h2>
         <h2>Recording</h2>
-        <video id="recording" className="videoFeed" width="160" height="120" controls autoPlay muted />
+        <video ref={videoRef} id="recording" className="videoFeed" width="160" height="120" controls autoPlay muted />
         {playing ? (
           <button id="stopButton" type="button" className="button" onClick={stopVideo}>
             Stop
