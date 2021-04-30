@@ -7,7 +7,7 @@ const constraints1: MediaStreamConstraints = { video: { width: 1280, height: 720
 
 async function startRecording(stream: MediaStream, lengthInMS: number) {
   const recorder = new MediaRecorder(stream);
-  const data: unknown[] = [];
+  const data: Blob[] = [];
 
   recorder.ondataavailable = (event) => data.push(event.data);
   recorder.start();
