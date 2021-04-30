@@ -21,7 +21,7 @@ const DreamVideo = () => {
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-          videoRef.current.onloadedmetadata = function (e) {
+          videoRef.current.onloadedmetadata = () => {
             videoRef.current?.play();
           };
         }
