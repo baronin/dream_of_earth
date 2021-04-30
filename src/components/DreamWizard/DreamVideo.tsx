@@ -2,9 +2,11 @@ import React, { ElementRef, useRef, useState } from "react";
 
 import css from "./DreamWizard.module.css";
 
+const constraints1: MediaStreamConstraints = { video: { width: 1280, height: 720 } };
+
 const DreamVideo = () => {
   const [playing, setPlaying] = useState(false);
-  const constraints1 = { video: { width: 1280, height: 720 } };
+
   /* {video: {
     width: {min: 340, ideal: 1280, max: 1920},
     height: { min: 452, ideal: 720, max: 1080},
@@ -14,20 +16,18 @@ const DreamVideo = () => {
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const startVideo = () => {
+  const startVideo = async () => {
     setPlaying(true);
-    navigator.mediaDevices
-      .getUserMedia(constraints1)
-      .then((stream) => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.onloadedmetadata = () => {
-            videoRef.current?.play();
-          };
-        }
-        console.log("stream", stream);
-      })
-      .catch((error) => console.log(error));
+
+    const stream = await navigator.mediaDevices.getUserMedia(constraints1);
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+      videoRef.current.onloadedmetadata = () => {
+        videoRef.current?.play();
+      };
+    }
+
     /* getMedia(constraints)
       .then((mediaStream) => {
         const video = document.querySelector('.videoFeed');
