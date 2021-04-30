@@ -1,8 +1,35 @@
+import { wait } from "@hapi/hoek";
 import React, { ElementRef, useRef, useState } from "react";
 
 import css from "./DreamWizard.module.css";
 
 const constraints1: MediaStreamConstraints = { video: { width: 1280, height: 720 } };
+
+async function startRecording(stream: MediaStream, lengthInMS: number) {
+  const recorder = new MediaRecorder(stream);
+  const data: Blob[] = [];
+
+  recorder.ondataavailable = (event) => data.push(event.data);
+  recorder.start();
+  console.log(`${recorder.state} for ${lengthInMS / 1000} seconds...`);
+
+  await new Promise((resolve, reject) => {
+    recorder.onstop = resolve;
+    recorder.onerror = (event) => reject(event.error.name);
+  });
+
+  await new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (recorder.state === "recording") {
+        recorder.stop();
+      } else {
+        reject(new Error("Recording error"));
+      }
+    }, lengthInMS);
+  });
+
+  return data;
+}
 
 const DreamVideo = () => {
   const [playing, setPlaying] = useState(false);
