@@ -1,154 +1,82 @@
-import { wait } from "@hapi/hoek";
 import React, { ElementRef, useRef, useState } from "react";
 
 import css from "./DreamWizard.module.css";
 
-const constraints1: MediaStreamConstraints = { video: { width: 1280, height: 720 } };
+const constraints: MediaStreamConstraints = { video: { width: 1280, height: 720 } };
 
-async function startRecording(stream: MediaStream, lengthInMS: number) {
+function wait(delayInMS: number) {
+  return new Promise((resolve) => setTimeout(resolve, delayInMS));
+}
+
+function startRecording(stream: MediaStream, lengthInMS: number) {
   const recorder = new MediaRecorder(stream);
   const data: Blob[] = [];
 
   recorder.ondataavailable = (event) => data.push(event.data);
   recorder.start();
-  console.log(`${recorder.state} for ${lengthInMS / 1000} seconds...`);
+  console.log(`${recorder.state} for  ${lengthInMS / 1000}  seconds...`);
 
-  await new Promise((resolve, reject) => {
+  const stopped = new Promise((resolve, reject) => {
     recorder.onstop = resolve;
     recorder.onerror = (event) => reject(event.error.name);
   });
 
-  await new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (recorder.state === "recording") {
-        recorder.stop();
-      } else {
-        reject(new Error("Recording error"));
-      }
-    }, lengthInMS);
-  });
+  const recorded = wait(lengthInMS).then(() => recorder.state === "recording" && recorder.stop());
 
-  return data;
+  return Promise.all([stopped, recorded]).then(() => data);
+}
+
+function stop(stream: MediaStream) {
+  stream.getTracks().forEach((track) => track.stop());
 }
 
 const DreamVideo = () => {
   const [playing, setPlaying] = useState(false);
-
-  /* {video: {
-    width: {min: 340, ideal: 1280, max: 1920},
-    height: { min: 452, ideal: 720, max: 1080},
-    facingMode: "user" // front camera if u use back camera  u need this condition | facingMode: { exact: "environment" }
-  }}
-  */
-  function handleSuccess(stream: any, video: Element | null) {
-    console.log("getUserMedia() got stream:", stream);
-    window.stream = stream;
-
-    if (video) {
-      // eslint-disable-next-line no-param-reassign
-      video.srcObject = stream;
-    }
-  }
-
   const videoRef = useRef<HTMLVideoElement>(null);
+  const downloadRef = useRef<HTMLAnchorElement>(null);
 
   const startVideo = async () => {
     setPlaying(true);
 
-    const stream = await navigator.mediaDevices.getUserMedia(constraints1);
-
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
-      videoRef.current.onloadedmetadata = () => {
-        videoRef.current?.play();
-      };
-    }
-
-    /* getMedia(constraints)
-      .then((mediaStream) => {
-        const video = document.querySelector('.videoFeed');
-        console.log(video);
-        if (video) {
-          video.srcObject = mediaStream;
-          video.onloadedmetadata = function(e) {
-            video.play();
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then((stream) => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          downloadRef.current.href = stream;
+          videoRef.current.captureStream = videoRef.current.captureStream || videoRef.current.mozCaptureStream;
+          videoRef.current.onloadedmetadata = () => {
+            videoRef.current?.play();
           };
         }
-        console.log('getMedia test res', mediaStream);
+
+        return new Promise((resolve) => videoRef.current.onplaying = resolve);
       })
-      .catch(error => {
-        console.error('error name', error.name)
-        console.error('error message', error.message)
-      }); */
-    /* navigator.getUserMedia(
-      {
-        video: true
-      },
-      (stream) => {
-        let video =  document.getElementsByClassName('videoFeed')[0];
-        console.log(video);
-        if (video) {
-          video.srcObject = stream;
-          console.log('video', video);
-        }
-      },
-        (error) => console.error(error));
-    console.log('start video'); */
+      .then(() => {
+        console.log("then2");
+        startRecording(videoRef.current.captureStream(), 5000).then((recordedChunks: BlobPart[]) => {
+          console.log("then3", recordedChunks);
+          const recordedBlob: Blob = new Blob(recordedChunks, { type: "video/webm" });
+          videoRef.current.src = URL.createObjectURL(recordedBlob);
+          downloadRef.current.href = videoRef.current.src;
+          downloadRef.current.download = "RecordedVideo.webm";
+          console.log(`Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`);
+        });
+      })
+      .catch((e) => console.error("THIS IS ERROR", e));
   };
-  const stopVideo = () => {
+
+  const stopVideo = async () => {
     setPlaying(false);
-    const video = document.querySelector(".videoFeed");
-    if (video) {
-      navigator.mediaDevices
-        .getUserMedia(constraints1)
-        .then(() => {
-          const stream = video.srcObject;
-          const tracks = stream.getTracks();
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-          tracks.forEach((track: { stop: () => void }) => {
-            console.log("foreach");
-            track.stop();
-          });
-
-          // video.srcObject = null;
-        })
-        .catch((error) => console.log(error));
-      console.log("stop video", video);
-      /* const stream = video.srcObject;
-      const tracks = stream.getTracks();
-      tracks.forEach((track: { stop: () => void; }) => {
-        track.stop();
-      });
-      video.srcObject = null; */
+    if (videoRef.current) {
+      stop(videoRef.current.srcObject);
+      // videoRef.current.srcObject = stream;
+      console.log("stop video", videoRef);
     }
   };
 
-  const recordingTimeMS = 5000;
-  /* function log(msg) {
-    logElement.innerHTML += msg + "\n";
-  }
-
-  function wait(delayInMS) {
-    return new Promise((resolve) => setTimeout(resolve, delayInMS));
-  }
-
-  function startRecording(stream: any, lengthInMS: number) {
-    const recorder = new MediaRecorder(stream);
-    const data: any[] | PromiseLike<any[]> = [];
-
-    recorder.ondataavailable = (event: { data: any }) => data.push(event.data);
-    recorder.start();
-    log(`${recorder.state} for ${lengthInMS / 1000} seconds...`);
-
-    const stopped = new Promise((resolve, reject) => {
-      recorder.onstop = resolve;
-      recorder.onerror = (event: { name: any }) => reject(event.name);
-    });
-
-    const recorded = wait(lengthInMS).then(() => recorder.state === "recording" && recorder.stop());
-
-    return Promise.all([stopped, recorded]).then(() => data);
-  } */
   return (
     <div>
       <div className={css.textWrapTitle}>
@@ -158,23 +86,20 @@ const DreamVideo = () => {
       <div className="previewVideo">
         <h2>Preview</h2>
         <h2>Recording</h2>
-        <video ref={videoRef} id="recording" className="videoFeed" width="160" height="120" controls autoPlay muted />
+        <video ref={videoRef} className="videoFeed" width="320" height="160" controls autoPlay muted />
         {playing ? (
-          <button id="stopButton" type="button" className="button" onClick={stopVideo}>
+          <button type="button" className={css.recordVideo} onClick={stopVideo}>
             Stop
           </button>
         ) : (
-          <button id="startButton" type="button" className="button" onClick={startVideo}>
+          <button type="button" className={css.recordVideo} onClick={startVideo}>
             Start
           </button>
         )}
 
-        <a id="downloadButton" className="button">
+        <a className={css.downloadVideo} ref={downloadRef}>
           Download
         </a>
-        {/*
-        <video className={css.previewVideo} id="preview" width="340" height="452" autoPlay muted />
-*/}
       </div>
     </div>
   );
