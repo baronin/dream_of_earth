@@ -32,49 +32,36 @@ function stop(stream: MediaStream) {
 
 const DreamVideo = () => {
   const [playing, setPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const downloadRef = useRef<HTMLAnchorElement>(null);
+  const videoRef = useRef<HTMLVideoElement>({} as HTMLVideoElement);
+  const downloadRef = useRef<HTMLAnchorElement>({} as HTMLAnchorElement);
 
   const startVideo = async () => {
     setPlaying(true);
 
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then((stream) => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          downloadRef.current.href = stream;
-          videoRef.current.captureStream = videoRef.current.captureStream || videoRef.current.mozCaptureStream;
-          videoRef.current.onloadedmetadata = () => {
-            videoRef.current?.play();
-          };
-        }
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    videoRef.current.srcObject = stream;
+    downloadRef.current.href = stream.toString();
+    videoRef.current.onloadedmetadata = () => {
+      videoRef.current?.play();
+    };
 
-        return new Promise((resolve) => videoRef.current.onplaying = resolve);
-      })
-      .then(() => {
-        console.log("then2");
-        startRecording(videoRef.current.captureStream(), 5000).then((recordedChunks: BlobPart[]) => {
-          console.log("then3", recordedChunks);
-          const recordedBlob: Blob = new Blob(recordedChunks, { type: "video/webm" });
-          videoRef.current.src = URL.createObjectURL(recordedBlob);
-          downloadRef.current.href = videoRef.current.src;
-          downloadRef.current.download = "RecordedVideo.webm";
-          console.log(`Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`);
-        });
-      })
-      .catch((e) => console.error("THIS IS ERROR", e));
+    await new Promise((resolve) => {
+      if (!videoRef.current) return;
+      videoRef.current.onplaying = resolve;
+    });
+    const recordedChunks = await startRecording(stream, 5000).catch((e) => console.error("THIS IS ERROR", e));
+
+    if (!recordedChunks) return;
+    const recordedBlob: Blob = new Blob(recordedChunks, { type: "video/webm" });
+    videoRef.current.src = URL.createObjectURL(recordedBlob);
+    downloadRef.current.href = videoRef.current.src;
+    downloadRef.current.download = "RecordedVideo.webm";
+    console.log(`Successfully recorded ${recordedBlob.size} bytes of ${recordedBlob.type} media.`);
   };
 
   const stopVideo = async () => {
     setPlaying(false);
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-
-    if (videoRef.current) {
-      stop(videoRef.current.srcObject);
-      // videoRef.current.srcObject = stream;
-      console.log("stop video", videoRef);
-    }
+    stop(videoRef.current.srcObject as MediaStream);
   };
 
   return (
