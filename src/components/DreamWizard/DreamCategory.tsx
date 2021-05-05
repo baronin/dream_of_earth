@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { DreamCategory as DreamCategoryType } from "../../../types/dreamCategory";
+import { DreamCategory as DreamCategoryType } from "../../../@types/dreamCategory";
 import { categories as dreamCategories } from "../../mock/dream-categories";
 import css from "./DreamWizard.module.css";
 

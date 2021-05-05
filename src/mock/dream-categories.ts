@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/default
-import { DreamCategory } from "../../types/dreamCategory";
+import { DreamCategory } from "../../@types/dreamCategory";
 
 // eslint-disable-next-line import/prefer-default-export
 export const categories: DreamCategory[] = [

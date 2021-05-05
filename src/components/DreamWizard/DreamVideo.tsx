@@ -42,7 +42,7 @@ const DreamVideo = () => {
     if (videoRef.current && downloadRef.current) {
       videoRef.current.srcObject = stream;
       downloadRef.current.href = stream.toString();
-      // videoRef.current.captureStream = videoRef.current.captureStream || videoRef.current.mozCaptureStream;
+      videoRef.current.captureStream = videoRef.current.captureStream || videoRef.current.mozCaptureStream;
       videoRef.current.onloadedmetadata = () => {
         videoRef.current?.play();
         console.log(videoRef);

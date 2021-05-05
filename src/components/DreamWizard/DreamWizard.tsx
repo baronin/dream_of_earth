@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { DreamCategory as DreamCategoryType } from "../../../types/dreamCategory";
+import { DreamCategory as DreamCategoryType } from "../../../@types/dreamCategory";
 import DreamCategory from "./DreamCategory";
 import DreamMessage from "./DreamMessage";
 import DreamText from "./DreamText";

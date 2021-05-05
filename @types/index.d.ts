@@ -13,3 +13,5 @@ declare global {
     mozCaptureStream(frameRate?: number): MediaStream;
   }
 }
+
+export {};
