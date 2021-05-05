@@ -2,7 +2,8 @@ import React, { ElementRef, useRef, useState } from "react";
 
 import css from "./DreamWizard.module.css";
 
-const constraints: MediaStreamConstraints = { video: { width: 1280, height: 720 } };
+
+const constraints: MediaStreamConstraints = { video: { width: 340, height: 450 }, audio: true };
 
 function wait(delayInMS: number) {
   return new Promise((resolve) => setTimeout(resolve, delayInMS));
@@ -41,8 +42,10 @@ const DreamVideo = () => {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     videoRef.current.srcObject = stream;
     downloadRef.current.href = stream.toString();
+    videoRef.current.captureStream = videoRef.current.captureStream || videoRef.current.mozCaptureStream;
     videoRef.current.onloadedmetadata = () => {
       videoRef.current?.play();
+      console.log(videoRef);
     };
 
     await new Promise((resolve) => {
@@ -70,17 +73,17 @@ const DreamVideo = () => {
         <h2>Record your dream</h2>
         <p>Record your 30-second video! For example, start with “Hi, I’m Robin from Sweden and I dream of ...”</p>
       </div>
-      <div className="previewVideo">
-        <h2>Preview</h2>
-        <h2>Recording</h2>
-        <video ref={videoRef} className="videoFeed" width="320" height="160" controls autoPlay muted />
+      <div className={css.previewVideo}>
+        <video ref={videoRef} className={css.videoFeed} width="340" height="450" controls autoPlay muted />
         {playing ? (
-          <button type="button" className={css.recordVideo} onClick={stopVideo}>
-            Stop
+          <button type="button" className={`${css.recordVideo} ${css.endRecord}`} onClick={stopVideo}>
+            <span />
+            End recording
           </button>
         ) : (
-          <button type="button" className={css.recordVideo} onClick={startVideo}>
-            Start
+          <button type="button" className={`${css.recordVideo} ${css.startRecord}`} onClick={startVideo}>
+            <span />
+            Start recording
           </button>
         )}
 
