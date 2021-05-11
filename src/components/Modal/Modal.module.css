@@ -5,6 +5,7 @@
   display: flex;
   width: 100vw;
   height: 100vh;
+  min-height: 700px;
   background-color: rgba(0,0,0,.4);
   z-index: 100;
   opacity: 0;

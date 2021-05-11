@@ -6,6 +6,8 @@ import DreamMessage from "./DreamMessage";
 import DreamText from "./DreamText";
 import DreamVideo from "./DreamVideo";
 import css from "./DreamWizard.module.css";
+import DreamRecordVideo from "../ReactMediaRecorder/DreamRecordVideo";
+import Recording from "../ReactMediaRecorder/Recording";
 
 const DreamWizard: React.FC = () => {
   const [step, setStep] = useState(1);

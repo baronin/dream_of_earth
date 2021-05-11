@@ -150,7 +150,6 @@
 .recordVideo,
 .downloadVideo {
   position: relative;
-  display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -164,6 +163,18 @@
   border: 1px solid #4E4E4E;
   border-radius: 7px;
   cursor: pointer;
+}
+
+.recordVideo {
+  display: flex;
+}
+
+.downloadVideo {
+  opacity: 0.2;
+}
+
+.downloadVideoShow {
+  opacity: 1;
 }
 
 .startRecord span,
