@@ -1,13 +1,24 @@
 .userCart {
-  width: calc(100% / 6);
+  width: calc(100% / 2);
   padding: 3px;
+}
+@media (min-width: 600px) {
+  .userCart {
+    width: calc(100% / 6);
+  }
 }
 
 .userCartInner {
   display: inline-block;
   width: 100%;
-  height: 283px;
+  height: 223px;
   border: 1px solid #fff;
   box-sizing: border-box;
   border-radius: 6px;
+}
+
+@media (min-width: 600px) {
+  .userCartInner {
+    height: 283px;
+  }
 }
