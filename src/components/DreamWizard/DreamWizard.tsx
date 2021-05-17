@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
+import css from "./DreamWizard.module.css";
+
 import { DreamCategory as DreamCategoryType } from "../../../@types/dreamCategory";
 import DreamCategory from "./DreamCategory";
 import DreamMessage from "./DreamMessage";
 import DreamText from "./DreamText";
-import DreamVideo from "./DreamVideo";
-import css from "./DreamWizard.module.css";
-import DreamRecordVideo from "../ReactMediaRecorder/DreamRecordVideo";
-import Recording from "../ReactMediaRecorder/Recording";
+
+import DreamVideoTest from "./DreamVideoTest";
 
 const DreamWizard: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -42,7 +42,7 @@ const DreamWizard: React.FC = () => {
       {step === 1 && <DreamMessage onSelect={onSelectType} />}
       {step === 2 && <DreamCategory onSelect={onSelectCategory} defaultCategories={categories} />}
       {step === 3 && type === "Text" && <DreamText onSelect={onSetTextDream} />}
-      {step === 3 && type === "Video" && <DreamVideo />}
+      {step === 3 && type === "Video" && <DreamVideoTest />}
     </div>
   );
 };

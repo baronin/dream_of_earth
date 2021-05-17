@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 
 import css from "./DreamWizard.module.css";
-import start from "./RecordingVideo";
 
 const constraints: MediaStreamConstraints = { video: { width: 340, height: 450 }, audio: true };
 
@@ -10,23 +9,31 @@ const DreamVideo = () => {
   const [download, setDownload] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const downloadRef = useRef<HTMLAnchorElement>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const newStream = navigator.mediaDevices.getUserMedia(constraints);
 
-  const startVideo = async () => {
-    setPlaying(true);
-    if (!videoRef.current) return;
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-
-    videoRef.current.srcObject = stream;
-    await start(stream, videoRef.current);
-
-    setPlaying(false);
-
-    if (downloadRef.current) {
-      downloadRef.current.href = videoRef.current.src;
-      downloadRef.current.download = "RecordedVideo.webm";
-      setDownload(true);
-    }
-  };
+  // const startVideo = async () => {
+  //   setPlaying(true);
+  //   if (!videoRef.current) return;
+  //
+  //   videoRef.current.srcObject = stream;
+  //   if (stream) await start(stream, videoRef.current);
+  //   console.log("stop stream", stream);
+  //
+  //   setPlaying(false);
+  //
+  //   if (downloadRef.current) {
+  //     downloadRef.current.href = videoRef.current.src;
+  //     downloadRef.current.download = "RecordedVideo.webm";
+  //     setDownload(true);
+  //   }
+  // };
+  //
+  // const stopVideo = () => {
+  //   console.log(stream);
+  //   if (!stream) return;
+  //   stream.getTracks().forEach((track) => track.stop());
+  // };
 
   return (
     <div>

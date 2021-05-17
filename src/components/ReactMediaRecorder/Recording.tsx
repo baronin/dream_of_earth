@@ -83,7 +83,7 @@ function useMediaRecorder({
     }
   }
 
-  async function startRecording() {
+  /*async function startRecording() {
     if (error) {
       setError(null);
     }
@@ -103,7 +103,7 @@ function useMediaRecorder({
       setStatus("recording");
       onStart();
     }
-  }
+  }*/
 
   function handleDataAvailable(e) {
     if (e.data.size) {

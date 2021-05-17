@@ -34,7 +34,7 @@ const start = async (stream: MediaStream, video: HTMLVideoElement) => {
   await waitMetaData(video);
   await video.play();
 
-  const recordedChunks = await record(stream, 5000);
+  const recordedChunks = await record(stream, 15000);
 
   const recordedBlob: Blob = new Blob(recordedChunks, { type: "video/webm" });
   video.srcObject = null;
