@@ -195,3 +195,35 @@
 .endRecord span {
   background-color: #A0A0A0;
 }
+
+.wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.crop {
+  position: relative;
+  max-width: 320px;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+}
+
+.crop video {
+  position: absolute;
+  left: -50%;
+  transform: translateX(-5%);
+}
+
+.wrap p {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.videoAccessStart {
+  background-color: #4E4E4E;
+  border-radius: 7px;
+}
