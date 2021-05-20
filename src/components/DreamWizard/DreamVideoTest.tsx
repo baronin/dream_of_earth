@@ -1,6 +1,7 @@
 import React from "react";
 
-import { LiveStreamPreview, Player, useMediaRecorder } from "../ReactMediaRecorder/useMediaRecorder";
+import { EmptyPreview, LiveStreamPreview, Player, useMediaRecorder } from "../ReactMediaRecorder/useMediaRecorder";
+import css from "./DreamWizard.module.css";
 
 const DreamVideoTest = () => {
   const {
@@ -12,36 +13,42 @@ const DreamVideoTest = () => {
     startRecording,
     clearMediaStream,
   } = useMediaRecorder({
-    mediaStreamConstraints: { audio: true, video: true }
+    mediaStreamConstraints: { audio: true, video: true },
   });
 
-  React.useEffect(() => clearMediaStream, []);
+  React.useEffect(() => {
+    getMediaStream();
+    // clearMediaStream;
+  }, []);
   return (
     <article>
       <h1>Video recorder</h1>
-      <dialog open={status === "get_media_stream"}>Waiting for permissions</dialog>
+      <dialog open={status === "acquiring_media"}>Waiting for permissions</dialog>
       <p>Select video sourceel</p>
-      <section>
-        {status !== "recording" && (
+      <section className={css.wrap}>
+        <div className={css.crop}>
+          <LiveStreamPreview stream={liveStream} />
+        </div>
+        <Player srcBlob={mediaBlob} />
+        {status}
+        {status === "ready" && (
           <button
             type="button"
             onClick={async () => {
-              console.log("start recording");
-              await getMediaStream();
               await startRecording();
             }}
           >
             Start recording
           </button>
         )}
-        {status === "recording" && (
-          <button type="button" onClick={stopRecording}>
-            Stop recording
-          </button>
-        )}
+
+        <button type="button" onClick={stopRecording}>
+          Stop recording
+        </button>
+        <button type="button" onClick={clearMediaStream}>
+          clearMediaStream recording
+        </button>
       </section>
-      <LiveStreamPreview stream={liveStream} />
-      <Player srcBlob={mediaBlob} />
     </article>
   );
 };
