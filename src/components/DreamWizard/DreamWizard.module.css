@@ -165,10 +165,16 @@
   border: 1px solid #4E4E4E;
   border-radius: 7px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 .recordVideo {
   display: flex;
+}
+
+.recordVideo:hover {
+  border-color: white;
+  transform: translateY(3px);
 }
 
 .downloadVideo {
@@ -201,6 +207,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .crop {
@@ -226,4 +235,14 @@
 .videoAccessStart {
   background-color: #4E4E4E;
   border-radius: 7px;
+}
+
+.wrap video {
+  margin-bottom: 25px;
+  border-radius: 7px;
+}
+
+.uploadVideo input {
+  display: none;
+  font-size: 0;
 }

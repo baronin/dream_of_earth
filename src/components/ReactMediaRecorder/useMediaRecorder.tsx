@@ -223,7 +223,7 @@ export function LiveStreamPreview({ stream }: LiveStreamProps) {
   }
 
   return (
-    <video ref={videoPreviewRef} width={720} height={480} autoPlay>
+    <video ref={videoPreviewRef} width={320} height={480} autoPlay>
       <track kind="" />
     </video>
   );
@@ -235,5 +235,5 @@ export function Player({ srcBlob }) {
     return null;
   }
 
-  return <video className="player" src={URL.createObjectURL(srcBlob)} width={720} height={480} controls />;
+  return <video className="player" src={URL.createObjectURL(srcBlob)} width={320} height={480} controls />;
 }

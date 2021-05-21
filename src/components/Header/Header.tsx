@@ -1,9 +1,9 @@
 import Link from "next/link";
-import React from "react";
+import React, { FunctionComponent} from "react";
 
 import css from "./Header.module.css";
 
-const Header = () => {
+const Header: FunctionComponent = () => {
   return (
     <header className={css.header}>
       <div className={`${css.headerContainer} container`}>
