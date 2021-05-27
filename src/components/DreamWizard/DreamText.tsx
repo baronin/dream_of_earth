@@ -27,7 +27,9 @@ const DreamText: FC<Props> = ({ onSelect }) => {
           rows={10}
           maxLength={140}
           placeholder="Write your dream here..."
-        >{textArea}</textarea>
+        >
+          {textArea}
+        </textarea>
         <button
           className={css.btnNextStep}
           type="button"
@@ -37,7 +39,6 @@ const DreamText: FC<Props> = ({ onSelect }) => {
           Next step
         </button>
       </div>
-
     </div>
   );
 };

@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 
-import css from "./DreamWizard.module.css";
-
 import { DreamCategory as DreamCategoryType } from "../../../@types/dreamCategory";
+import FormAboutUser from "../FormAboutUser";
 import DreamCategory from "./DreamCategory";
 import DreamMessage from "./DreamMessage";
 import DreamText from "./DreamText";
-
-import DreamVideoTest from "./DreamVideoTest";
+import DreamVideo from "./DreamVideo";
+import css from "./DreamWizard.module.css";
 
 const DreamWizard: React.FC = () => {
   const [step, setStep] = useState(1);
   const [type, setType] = useState<"Text" | "Video">("Text");
   const [categories, setCategories] = useState<DreamCategoryType[]>([]);
   const [textDream, setTextDream] = useState("");
+  const [videoDream, setVideoDream] = useState("");
   const onSelectType = (newType: "Text" | "Video") => {
     setType(newType);
     setStep(step + 1);
@@ -24,6 +24,10 @@ const DreamWizard: React.FC = () => {
   };
   const onSetTextDream = (newText: string) => {
     setTextDream(newText);
+    setStep(step + 1);
+  };
+  const onSetVideoDream = (newVideo: string) => {
+    setVideoDream(newVideo);
     setStep(step + 1);
   };
 
@@ -42,7 +46,8 @@ const DreamWizard: React.FC = () => {
       {step === 1 && <DreamMessage onSelect={onSelectType} />}
       {step === 2 && <DreamCategory onSelect={onSelectCategory} defaultCategories={categories} />}
       {step === 3 && type === "Text" && <DreamText onSelect={onSetTextDream} />}
-      {step === 3 && type === "Video" && <DreamVideoTest />}
+      {step === 3 && type === "Video" && <DreamVideo onSelect={onSetTextDream} />}
+      {step === 4 && <FormAboutUser />}
     </div>
   );
 };

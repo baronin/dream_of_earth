@@ -20,7 +20,7 @@ function validateMediaTrackConstraints(mediaType: any) {
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-type MediaRecorderHookOptions = {
+export type MediaRecorderHookOptions = {
   blobOptions: BlobPart[] | Blob;
   onStop: (blob: Blob) => void;
   onStart: () => void;
@@ -44,6 +44,7 @@ export function useMediaRecorder({
   const mediaRecorder = React.useRef<MediaRecorder | null>(null);
   const [error, setError] = React.useState<DOMException | null>(null);
   const [status, setStatus] = React.useState("idle");
+  const [nextStep, setNextStep] = React.useState("");
   const [mediaBlob, setMediaBlob] = React.useState<Blob | null>(null);
 
   async function getMediaStream() {
@@ -106,6 +107,7 @@ export function useMediaRecorder({
 
     const blob = new Blob(mediaChunks.current, blobPropertyBag);
     setStatus("Stopped");
+    setNextStep(true);
     setMediaBlob(blob);
     onStop(blob);
   }
@@ -185,6 +187,7 @@ export function useMediaRecorder({
   return {
     error,
     status,
+    nextStep,
     mediaBlob,
     stopRecording,
     getMediaStream,
