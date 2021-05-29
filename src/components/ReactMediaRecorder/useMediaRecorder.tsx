@@ -23,10 +23,10 @@ const noop = () => {};
 export type MediaRecorderHookOptions = {
   blobOptions: BlobPart[] | Blob;
   onStop: (blob: Blob) => void;
-  onStart: () => void;
+  onStart?: () => void;
   onError: (error: Error) => void;
-  onDataAvailable: (blob: Blob) => void;
-  mediaRecorderOptions: Record<string, unknown>;
+  onDataAvailable?: (blob: Blob) => void;
+  mediaRecorderOptions?: Record<string, unknown>;
   mediaStreamConstraints: Record<string, unknown>;
 };
 
@@ -43,10 +43,13 @@ export function useMediaRecorder({
   const mediaStream = React.useRef<MediaStream | null>(null);
   const mediaRecorder = React.useRef<MediaRecorder | null>(null);
   const [error, setError] = React.useState<DOMException | null>(null);
-  const [status, setStatus] = React.useState("idle");
-  const [nextStep, setNextStep] = React.useState("");
+  const initialStatus = Array.isArray(blobOptions) && blobOptions.length === 0 ? "idle" : "finished";
+  const [status, setStatus] = React.useState(initialStatus);
   const [mediaBlob, setMediaBlob] = React.useState<Blob | null>(null);
 
+  function wait(delayInMS: number) {
+    return new Promise((resolve) => setTimeout(resolve, delayInMS));
+  }
   async function getMediaStream() {
     if (error) {
       console.log("getMediaStream", error);
@@ -63,8 +66,8 @@ export function useMediaRecorder({
       setError(err);
       setStatus("failed");
     } finally {
-      console.log("status", status);
-      console.log("error", error);
+      console.log("getMediaStream status", status);
+      console.log("getMediaStream error", error);
     }
   }
 
@@ -74,11 +77,7 @@ export function useMediaRecorder({
       setError(null);
     }
 
-    if (!mediaStream.current) {
-      await getMediaStream();
-    }
     console.log("startRecording mediaStream.current", mediaStream.current);
-
     mediaChunks.current = [];
 
     if (mediaStream.current) {
@@ -87,10 +86,14 @@ export function useMediaRecorder({
       mediaRecorder.current.addEventListener("stop", handleStop);
       mediaRecorder.current.addEventListener("error", handleError);
       mediaRecorder.current.start();
-      setStatus("recording");
+      console.log(`${mediaRecorder.current.state} for  ${4000 / 1000}  seconds...`);
+
+      setStatus(mediaRecorder.current.state); // it be "recording"
       onStart();
       console.log("mediaStream.current", mediaStream.current);
       console.log("mediaRecorder.current", mediaRecorder.current);
+    } else {
+      await getMediaStream();
     }
   }
 
@@ -102,12 +105,12 @@ export function useMediaRecorder({
   }
 
   function handleStop() {
+    console.log("function handleStop");
     const [sampleChunk] = mediaChunks.current;
     const blobPropertyBag = { type: sampleChunk.type, ...blobOptions };
 
     const blob = new Blob(mediaChunks.current, blobPropertyBag);
     setStatus("Stopped");
-    setNextStep(true);
     setMediaBlob(blob);
     onStop(blob);
   }
@@ -149,8 +152,6 @@ export function useMediaRecorder({
   function stopRecording() {
     console.log("stopRecording mediaRecorder.current", mediaRecorder.current);
     if (mediaRecorder.current) {
-      console.log("mediaRecorder.current", mediaRecorder.current);
-      console.log("mediaRecorder", mediaRecorder);
       setStatus("stopping");
       mediaRecorder.current.stop();
       mediaRecorder.current.removeEventListener("stop", handleStop);
@@ -187,7 +188,6 @@ export function useMediaRecorder({
   return {
     error,
     status,
-    nextStep,
     mediaBlob,
     stopRecording,
     getMediaStream,
@@ -202,10 +202,6 @@ export function useMediaRecorder({
       return null;
     },
   };
-}
-
-export function EmptyPreview() {
-  return <button type="button">Allow camera access to start recording</button>;
 }
 
 type LiveStreamProps = {
@@ -226,17 +222,25 @@ export function LiveStreamPreview({ stream }: LiveStreamProps) {
   }
 
   return (
-    <video ref={videoPreviewRef} width={320} height={480} autoPlay>
-      <track kind="" />
+    <video className="previewVideo" ref={videoPreviewRef} width={320} height={480} autoPlay>
+      <track kind="captions" />
     </video>
   );
 }
 
-export function Player({ srcBlob }) {
-  console.log("Player blob", srcBlob);
-  if (!srcBlob) {
+export type PlayerProps = {
+  blob: Blob | null;
+};
+
+export function Player({ blob }: PlayerProps) {
+  console.log("Player blob", blob);
+  if (!blob) {
     return null;
   }
 
-  return <video className="player" src={URL.createObjectURL(srcBlob)} width={320} height={480} controls />;
+  return (
+    <video className="player" src={URL.createObjectURL(blob)} width={320} height={480} controls>
+      <track kind="captions" />
+    </video>
+  );
 }

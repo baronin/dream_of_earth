@@ -13,7 +13,8 @@ const DreamWizard: React.FC = () => {
   const [type, setType] = useState<"Text" | "Video">("Text");
   const [categories, setCategories] = useState<DreamCategoryType[]>([]);
   const [textDream, setTextDream] = useState("");
-  const [videoDream, setVideoDream] = useState("");
+  const [videoDream, setVideoDream] = useState<Blob | null>(null);
+
   const onSelectType = (newType: "Text" | "Video") => {
     setType(newType);
     setStep(step + 1);
@@ -26,8 +27,10 @@ const DreamWizard: React.FC = () => {
     setTextDream(newText);
     setStep(step + 1);
   };
-  const onSetVideoDream = (newVideo: string) => {
+  const onSetVideoDream = (newVideo: Blob | null) => {
     setVideoDream(newVideo);
+  };
+  const onSaveVideo = () => {
     setStep(step + 1);
   };
 
@@ -46,7 +49,7 @@ const DreamWizard: React.FC = () => {
       {step === 1 && <DreamMessage onSelect={onSelectType} />}
       {step === 2 && <DreamCategory onSelect={onSelectCategory} defaultCategories={categories} />}
       {step === 3 && type === "Text" && <DreamText onSelect={onSetTextDream} />}
-      {step === 3 && type === "Video" && <DreamVideo onSelect={onSetTextDream} />}
+      {step === 3 && type === "Video" && <DreamVideo onSelect={onSetVideoDream} video={videoDream} onSaveVideo={onSaveVideo}/>}
       {step === 4 && <FormAboutUser />}
     </div>
   );

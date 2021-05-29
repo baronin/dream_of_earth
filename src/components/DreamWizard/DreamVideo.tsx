@@ -1,21 +1,32 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 
-import { LiveStreamPreview, Player, useMediaRecorder } from "../ReactMediaRecorder/useMediaRecorder";
+import {
+  LiveStreamPreview,
+  MediaRecorderHookOptions,
+  Player,
+  PlayerProps,
+  useMediaRecorder,
+} from "../ReactMediaRecorder/useMediaRecorder";
 import css from "./DreamWizard.module.css";
 
 type mediaStreamConstraints = { mediaStreamConstraints: { audio: boolean; video: { width: number; height: number } } };
 
 type Props = {
-  onSelect: (newText: string) => void;
+  onSelect: (newVideo: Blob | null) => void;
+  video: Blob | null;
+  onSaveVideo: () => void;
 };
 
-const DreamVideo: FC<Props> = ({ onSelect }) => {
-  const config: mediaStreamConstraints = {
+const DreamVideo: FC<Props> = ({ onSelect, video, onSaveVideo }) => {
+  const config: MediaRecorderHookOptions = {
     mediaStreamConstraints: { audio: true, video: { width: 320, height: 480 } },
+    blobOptions: video || [],
+    onStop: onSelect,
+    onError: () => console.log("onError"),
   };
+
   const {
     status,
-    nextStep,
     liveStream,
     mediaBlob,
     stopRecording,
@@ -25,8 +36,11 @@ const DreamVideo: FC<Props> = ({ onSelect }) => {
   } = useMediaRecorder(config);
 
   React.useEffect(() => {
+    console.log(status);
+    if (video) return;
     getMediaStream();
   }, []);
+
   return (
     <article className={css.textWrapTitle}>
       <h2>Record your dream</h2>
@@ -41,56 +55,52 @@ const DreamVideo: FC<Props> = ({ onSelect }) => {
         <div>
           <h2>{status}</h2>
           <hr />
-          <h2>{nextStep}</h2>
           <p>Record your 30-second video! For example, start with “Hi, I’m Robin from Sweden and I dream of ...”</p>
         </div>
       )}
 
-      {status !== "idle" && (
-        <section className={css.wrap}>
-          {status === "stopped" ? null : <LiveStreamPreview stream={liveStream} />}
-          {status === "recording" ? null : <Player srcBlob={mediaBlob} />}
-          {status === "ready" && (
+      <section className={css.wrap}>
+        {liveStream && !video && <LiveStreamPreview stream={liveStream} />}
+        {video && <Player blob={video} />}
+        {status === "ready" && (
+          <button type="button" className={`${css.recordVideo} ${css.startRecord}`} onClick={startRecording}>
+            <span />
+            Start recording
+          </button>
+        )}
+
+        {status === "recording" && (
+          <button
+            type="button"
+            onClick={stopRecording}
+            className={`${css.recordVideo} ${css.endRecord}`}
+          >
+            <span />
+            End recording
+          </button>
+        )}
+        {(status === "Stopped" || status === "finished") && (
+          <div style={{ display: "flex", flex: "1 1 0" }}>
             <button
               type="button"
               className={`${css.recordVideo} ${css.startRecord}`}
               onClick={async () => {
+                onSelect(null);
                 await startRecording();
               }}
             >
-              <span />
-              Start recording
+              Record again
             </button>
-          )}
-
-          {status === "recording" && (
-            <button type="button" onClick={stopRecording} className={`${css.recordVideo} ${css.endRecord}`}>
-              <span />
-              End recording
+            <button type="button" className={css.recordVideo} onClick={onSaveVideo}>
+              Next step
             </button>
-          )}
-          {status === "Stopped" && (
-            <div style={{ display: "flex", flex: "1 1 0" }}>
-              <button
-                type="button"
-                className={`${css.recordVideo} ${css.startRecord}`}
-                onClick={async () => {
-                  await startRecording();
-                }}
-              >
-                Record again
-              </button>
-              <button type="button" className={css.recordVideo} onClick={() => onSelect(nextStep)}>
-                Next step
-              </button>
-            </div>
-          )}
-          <label htmlFor="upload" className={css.uploadVideo}>
-            <input id="upload" type="file" placeholder="Can’t record? Upload video instead" />
-            Can’t record? Upload video instead
-          </label>
-        </section>
-      )}
+          </div>
+        )}
+        <label htmlFor="upload" className={css.uploadVideo}>
+          <input id="upload" type="file" placeholder="Can’t record? Upload video instead" />
+          Can’t record? Upload video instead
+        </label>
+      </section>
     </article>
   );
 };
