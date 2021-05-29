@@ -150,11 +150,8 @@ export function useReactMediaRecorder({
   // Media Recorder Handlers
 
   const startRecording = async () => {
-    console.log('START RECORD?');
+    console.log("START RECORD?");
     setError("NONE");
-    if (!mediaStream.current) {
-      await getMediaStream();
-    }
     if (mediaStream.current) {
       const isStreamEnded = mediaStream.current.getTracks().some((track) => track.readyState === "ended");
       if (isStreamEnded) {
@@ -169,6 +166,8 @@ export function useReactMediaRecorder({
       };
       mediaRecorder.current.start();
       setStatus("recording");
+    } else {
+      await getMediaStream();
     }
   };
 
@@ -201,6 +200,7 @@ export function useReactMediaRecorder({
       mediaRecorder.current.pause();
     }
   };
+
   const resumeRecording = () => {
     if (mediaRecorder.current && mediaRecorder.current.state === "paused") {
       mediaRecorder.current.resume();

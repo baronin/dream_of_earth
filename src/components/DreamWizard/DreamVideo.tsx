@@ -1,62 +1,107 @@
-import React, { useRef, useState } from "react";
+import React, { FC, useState } from "react";
 
+import {
+  LiveStreamPreview,
+  MediaRecorderHookOptions,
+  Player,
+  PlayerProps,
+  useMediaRecorder,
+} from "../ReactMediaRecorder/useMediaRecorder";
 import css from "./DreamWizard.module.css";
 
-const constraints: MediaStreamConstraints = { video: { width: 340, height: 450 }, audio: true };
+type mediaStreamConstraints = { mediaStreamConstraints: { audio: boolean; video: { width: number; height: number } } };
 
-const DreamVideo = () => {
-  const [playing, setPlaying] = useState(false);
-  const [download, setDownload] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const downloadRef = useRef<HTMLAnchorElement>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const newStream = navigator.mediaDevices.getUserMedia(constraints);
+type Props = {
+  onSelect: (newVideo: Blob | null) => void;
+  video: Blob | null;
+  onSaveVideo: () => void;
+};
 
-  // const startVideo = async () => {
-  //   setPlaying(true);
-  //   if (!videoRef.current) return;
-  //
-  //   videoRef.current.srcObject = stream;
-  //   if (stream) await start(stream, videoRef.current);
-  //   console.log("stop stream", stream);
-  //
-  //   setPlaying(false);
-  //
-  //   if (downloadRef.current) {
-  //     downloadRef.current.href = videoRef.current.src;
-  //     downloadRef.current.download = "RecordedVideo.webm";
-  //     setDownload(true);
-  //   }
-  // };
-  //
-  // const stopVideo = () => {
-  //   console.log(stream);
-  //   if (!stream) return;
-  //   stream.getTracks().forEach((track) => track.stop());
-  // };
+const DreamVideo: FC<Props> = ({ onSelect, video, onSaveVideo }) => {
+  const config: MediaRecorderHookOptions = {
+    mediaStreamConstraints: { audio: true, video: { width: 320, height: 480 } },
+    blobOptions: video || [],
+    onStop: onSelect,
+    onError: () => console.log("onError"),
+  };
+
+  const {
+    status,
+    liveStream,
+    mediaBlob,
+    stopRecording,
+    getMediaStream,
+    startRecording,
+    clearMediaStream,
+  } = useMediaRecorder(config);
+
+  React.useEffect(() => {
+    console.log(status);
+    if (video) return;
+    getMediaStream();
+  }, []);
 
   return (
-    <div>
-      <div className={css.textWrapTitle}>
-        <h2>Record your dream</h2>
-        <p>Record your 30-second video! For example, start with “Hi, I’m Robin from Sweden and I dream of ...”</p>
-      </div>
-      <div className={css.previewVideo}>
-        <video ref={videoRef} className={css.videoFeed} width="340" height="450" controls autoPlay muted />
-        {playing ? (
-          <button type="button" className={`${css.recordVideo} ${css.endRecord}`}>
-            <span />
-            End recording
-          </button>
-        ) : (
-          <button type="button" className={`${css.recordVideo} ${css.startRecord}`} onClick={startVideo}>
+    <article className={css.textWrapTitle}>
+      <h2>Record your dream</h2>
+      <h3>
+        <button type="button" className={css.recordVideo} onClick={clearMediaStream}>
+          Stop camera
+        </button>
+      </h3>
+      {status === "acquiring_media" ? (
+        <dialog open={status === "acquiring_media"}>Waiting for permissions</dialog>
+      ) : (
+        <div>
+          <h2>{status}</h2>
+          <hr />
+          <p>Record your 30-second video! For example, start with “Hi, I’m Robin from Sweden and I dream of ...”</p>
+        </div>
+      )}
+
+      <section className={css.wrap}>
+        {liveStream && !video && <LiveStreamPreview stream={liveStream} />}
+        {video && <Player blob={video} />}
+        {status === "ready" && (
+          <button type="button" className={`${css.recordVideo} ${css.startRecord}`} onClick={startRecording}>
             <span />
             Start recording
           </button>
         )}
-        <a className={`${css.downloadVideo} ${download ? css.downloadVideoShow : ""}`}>Download</a>
-      </div>
-    </div>
+
+        {status === "recording" && (
+          <button
+            type="button"
+            onClick={stopRecording}
+            className={`${css.recordVideo} ${css.endRecord}`}
+          >
+            <span />
+            End recording
+          </button>
+        )}
+        {(status === "Stopped" || status === "finished") && (
+          <div style={{ display: "flex", flex: "1 1 0" }}>
+            <button
+              type="button"
+              className={`${css.recordVideo} ${css.startRecord}`}
+              onClick={async () => {
+                onSelect(null);
+                await startRecording();
+              }}
+            >
+              Record again
+            </button>
+            <button type="button" className={css.recordVideo} onClick={onSaveVideo}>
+              Next step
+            </button>
+          </div>
+        )}
+        <label htmlFor="upload" className={css.uploadVideo}>
+          <input id="upload" type="file" placeholder="Can’t record? Upload video instead" />
+          Can’t record? Upload video instead
+        </label>
+      </section>
+    </article>
   );
 };
 
