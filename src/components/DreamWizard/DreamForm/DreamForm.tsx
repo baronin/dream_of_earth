@@ -1,28 +1,39 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 
+import { DreamCategory } from "../../../../@types/dreamCategory";
+import { DreamDataForm } from "../../../../@types/dreamDataForm";
 import css from "./DreamForm.module.css";
 
-const DreamForm = ({ fromDream }) => {
-  const [fullName, setFullname] = useState("");
+type PropsWizard = {
+  videoDream: Blob | null;
+  textDream: string;
+  categories: DreamCategory[] | string[];
+};
+
+const DreamForm: FC<PropsWizard> = ({ videoDream, textDream, categories }) => {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [country, setCountry] = useState({
     name: "Sweden",
   });
   const [acceptPrivacy, setAcceptPrivacy] = useState(false);
 
-  const getDataForm = {
+  const dataForm: DreamDataForm = {
     fullName,
     email,
     country,
     acceptPrivacy,
+    videoDream,
+    textDream,
+    categories,
   };
 
-  const checkForm = () => {
-    console.log(getDataForm);
+  const sendForm = () => {
+    console.log(dataForm);
   };
 
   return (
-    <div>
+    <div className={css.bg}>
       <form action="">
         <h2>Some info about yourself</h2>
         <p>
@@ -31,7 +42,7 @@ const DreamForm = ({ fromDream }) => {
         </p>
         <p>
           <input
-            onChange={(e) => setFullname(e.target.value)}
+            onChange={(e) => setFullName(e.target.value)}
             className={css.input}
             type="text"
             id="fullname"
@@ -40,7 +51,7 @@ const DreamForm = ({ fromDream }) => {
         </p>
         <p>
           <input
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             className={css.input}
             type="mail"
             id="email"
@@ -61,7 +72,7 @@ const DreamForm = ({ fromDream }) => {
           />
           I have read and approve the Terms and Conditions and Privary policy
         </label>
-        <button type="button" onClick={checkForm}>
+        <button className={css.btnSendForm} type="button" onClick={sendForm}>
           Send dream
         </button>
       </form>

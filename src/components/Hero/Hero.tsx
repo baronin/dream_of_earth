@@ -5,7 +5,7 @@ import Modal from "../Modal";
 import css from "./Hero.module.css";
 
 const Hero = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <section className={css.hero}>

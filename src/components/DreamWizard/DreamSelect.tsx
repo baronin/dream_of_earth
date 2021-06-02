@@ -6,7 +6,7 @@ type Props = {
   onSelect: (type: "Video" | "Text") => void;
 };
 
-const DreamMessage = (props: Props) => {
+const DreamSelect = (props: Props) => {
   const { onSelect } = props;
   return (
     <div>
@@ -61,4 +61,4 @@ const DreamMessage = (props: Props) => {
   );
 };
 
-export default DreamMessage;
+export default DreamSelect;

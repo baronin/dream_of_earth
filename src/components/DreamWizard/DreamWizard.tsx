@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
 import { DreamCategory as DreamCategoryType } from "../../../@types/dreamCategory";
-import FormAboutUser from "../FormAboutUser";
 import DreamCategory from "./DreamCategory";
-import DreamMessage from "./DreamMessage";
+import DreamForm from "./DreamForm/DreamForm";
+import DreamSelect from "./DreamSelect";
 import DreamText from "./DreamText";
 import DreamVideo from "./DreamVideo";
 import css from "./DreamWizard.module.css";
@@ -12,7 +12,7 @@ const DreamWizard: React.FC = () => {
   const [step, setStep] = useState(1);
   const [type, setType] = useState<"Text" | "Video">("Text");
   const [categories, setCategories] = useState<DreamCategoryType[]>([]);
-  const [textDream, setTextDream] = useState("");
+  const [textDream, setTextDream] = useState<string>("");
   const [videoDream, setVideoDream] = useState<Blob | null>(null);
 
   const onSelectType = (newType: "Text" | "Video") => {
@@ -35,7 +35,7 @@ const DreamWizard: React.FC = () => {
   };
 
   return (
-    <div>
+    <article>
       <div className={css.step}>
         {step >= 2 && (
           <button type="button" className={css.stepBtnBack} onClick={() => setStep(step - 1)}>
@@ -46,12 +46,14 @@ const DreamWizard: React.FC = () => {
         )}
         <p>Step {step}</p>
       </div>
-      {step === 1 && <DreamMessage onSelect={onSelectType} />}
+      {step === 1 && <DreamSelect onSelect={onSelectType} />}
       {step === 2 && <DreamCategory onSelect={onSelectCategory} defaultCategories={categories} />}
       {step === 3 && type === "Text" && <DreamText onSelect={onSetTextDream} />}
-      {step === 3 && type === "Video" && <DreamVideo onSelect={onSetVideoDream} video={videoDream} onSaveVideo={onSaveVideo}/>}
-      {step === 4 && <FormAboutUser />}
-    </div>
+      {step === 3 && type === "Video" && (
+        <DreamVideo onSelect={onSetVideoDream} video={videoDream} onSaveVideo={onSaveVideo} />
+      )}
+      {step === 4 && <DreamForm videoDream={videoDream} textDream={textDream} categories={categories} />}
+    </article>
   );
 };
 
