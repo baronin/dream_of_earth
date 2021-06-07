@@ -18,13 +18,18 @@ const Home: React.FC = () => {
   return (
     <div className={styles.app}>
       <Header />
-      <Hero />
-      <TopUsers />
-      <UserList />
-      <p>{featuredVideos?.[0].id}</p>
-      <p>{featuredVideos?.[0].sentBy}</p>
-      <p>{featuredVideos?.[0].location}</p>
-      <p>{videos?.[0].id}</p>
+      <main>
+        <Hero />
+        <TopUsers />
+        <UserList />
+        <p>{featuredVideos?.[0].id}</p>
+        <p>{featuredVideos?.[0].sentBy}</p>
+        <p>{featuredVideos?.[0].location}</p>
+        <p>{videos?.[0].id}</p>
+      </main>
+      <footer>
+        <p>© 2021 Dream for Earth </p>
+      </footer>
     </div>
   );
 };
