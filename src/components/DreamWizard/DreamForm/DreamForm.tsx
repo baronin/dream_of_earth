@@ -2,19 +2,17 @@ import React, { ChangeEvent, FC, useState } from "react";
 
 import { DreamCategory } from "../../../../@types/dreamCategory";
 import { DreamData } from "../../../../@types/DreamData";
-import { create } from "../../../api/dreams";
 import countries from "../../../mock/countries";
 import css from "./DreamForm.module.css";
 
 type PropsWizard = {
-  videoDream: Blob | null;
-  textDream: string;
+  dreamContent: string;
   categories: DreamCategory[];
 };
 
 const ACCESS_TOKEN = "45392dc057322eff77f2ea349edb606f";
 
-const DreamForm: FC<PropsWizard> = ({ videoDream, textDream, categories }) => {
+const DreamForm: FC<PropsWizard> = ({ dreamContent, categories }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [country, setCountry] = useState("Sweden");
@@ -26,8 +24,7 @@ const DreamForm: FC<PropsWizard> = ({ videoDream, textDream, categories }) => {
     email,
     country,
     acceptPrivacy,
-    videoDream: "Urls", // TODO need link for video dream
-    textDream,
+    dreamContent, // TODO need link for video dream
     categories: categoriesId,
   };
   // Пример отправки POST запроса:
@@ -92,21 +89,24 @@ const DreamForm: FC<PropsWizard> = ({ videoDream, textDream, categories }) => {
         </p>
         <p>
           <select name="country" id="country" value={country} onChange={handleChangeCounty}>
-            <option defaultValue={country} value="defaultCountry">
+            <option defaultValue={country} value="-1">
               {country}
             </option>
+            {/* eslint-disable-next-line react/no-array-index-key */}
             {countries && countries.map((item, i) => <option key={`${item.name} ${i}`}>{item.name}</option>)}
           </select>
         </p>
-        <label htmlFor="acceptPrivacy">
-          <input
-            type="checkbox"
-            id="acceptPrivacy"
-            onChange={() => setAcceptPrivacy(!acceptPrivacy)}
-            checked={acceptPrivacy}
-          />
-          I have read and approve the Terms and Conditions and Privary policy
-        </label>
+        <p>
+          <label htmlFor="acceptPrivacy">
+            <input
+              type="checkbox"
+              id="acceptPrivacy"
+              onChange={() => setAcceptPrivacy(!acceptPrivacy)}
+              checked={acceptPrivacy}
+            />
+            I have read and approve the Terms and Conditions and Privary policy
+          </label>
+        </p>
         <button className={css.btnSendForm} type="button" onClick={sendForm}>
           Send dream
         </button>
