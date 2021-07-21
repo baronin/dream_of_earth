@@ -1,6 +1,6 @@
 import React from "react";
 
-import UserCart from "../UserCart";
+import UserCard from "../UserCard";
 import css from "./UserList.module.css";
 
 const UserList = () => {
@@ -22,7 +22,7 @@ const UserList = () => {
         </div>
       </div>
       <div>
-        <UserCart />
+        <UserCard />
       </div>
     </div>
   );

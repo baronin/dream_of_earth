@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC, useState } from "react";
 
 import { DreamCategory } from "../../../../@types/dreamCategory";
-import { DreamDataForm } from "../../../../@types/dreamDataForm";
+import { DreamData } from "../../../../@types/DreamData";
 import { create } from "../../../api/dreams";
 import countries from "../../../mock/countries";
 import css from "./DreamForm.module.css";
@@ -21,7 +21,7 @@ const DreamForm: FC<PropsWizard> = ({ videoDream, textDream, categories }) => {
   const [acceptPrivacy, setAcceptPrivacy] = useState(false);
   const categoriesId = categories.map((item) => item.id);
 
-  const dataForm: DreamDataForm = {
+  const dataForm: Omit<DreamData, "id"> = {
     fullName,
     email,
     country,
@@ -51,12 +51,11 @@ const DreamForm: FC<PropsWizard> = ({ videoDream, textDream, categories }) => {
   }
 
   const sendForm = async () => {
-    postData("https://api.vimeo.com/me/videos").then((data) => {
-      // data.upload.upload_link;
-      console.log(data); // JSON data parsed by `response.json()` call
-    });
-    await create(dataForm);
-    alert("yo");
+    // postData("https://api.vimeo.com/me/videos").then((data) => {
+    //   // data.upload.upload_link;
+    //   console.log(data); // JSON data parsed by `response.json()` call
+    // });
+    // await create(dataForm);
     console.log(dataForm);
   };
 
@@ -96,7 +95,7 @@ const DreamForm: FC<PropsWizard> = ({ videoDream, textDream, categories }) => {
             <option defaultValue={country} value="defaultCountry">
               {country}
             </option>
-            {countries && countries.map((item) => <option key={item.code}>{item.name}</option>)}
+            {countries && countries.map((item, i) => <option key={`${item.name} ${i}`}>{item.name}</option>)}
           </select>
         </p>
         <label htmlFor="acceptPrivacy">

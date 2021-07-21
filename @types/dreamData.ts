@@ -1,11 +1,12 @@
 import { DreamCategory } from "./dreamCategory";
 
-export type DreamDataForm = {
+export type DreamData = {
+  id: string;
   fullName: string;
   email: string;
   country: { name: string } | string;
   acceptPrivacy: boolean;
-  videoDream?: Blob | [] | null;
+  videoDream?: string | null | undefined;
   textDream?: string;
   categories: DreamCategory[] | string[];
 };

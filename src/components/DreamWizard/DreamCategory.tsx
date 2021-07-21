@@ -33,7 +33,7 @@ const DreamCategory: React.FC<Props> = ({ defaultCategories, onSelect }) => {
       </div>
       <div className={css.categoriesList}>
         {dreamCategories.map((category) => (
-          <label key={category.id} htmlFor={category.id} style={{ backgroundColor: category.color }}>
+          <label key={`categories${category.id}`} htmlFor={category.id} style={{ backgroundColor: category.color }}>
             <input
               type="checkbox"
               checked={isActive(category)}
