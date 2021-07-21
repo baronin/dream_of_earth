@@ -12,7 +12,7 @@ const TopUsers = () => {
       const loadedDreams = await readDreams();
       setDreams(loadedDreams);
     };
-    getDreams().then((res) => console.log("res", res));
+    getDreams();
   }, []);
 
   const removeDream = async (id: string) => {
@@ -22,7 +22,7 @@ const TopUsers = () => {
     console.log("remove dream", id);
   };
 
-  console.log("dreams", dreams);
+  // console.log("dreams", dreams);
   return (
     <section className="TopPeople">
       <div className="container">

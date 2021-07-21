@@ -36,7 +36,7 @@ const DreamVideo: FC<Props> = ({ onSelect, video, onSaveVideo }) => {
   } = useMediaRecorder(config);
 
   React.useEffect(() => {
-    console.log(status);
+    console.log("status", status);
     if (video) return;
     getMediaStream();
   }, []);

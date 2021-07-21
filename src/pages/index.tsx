@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import { FC } from "react";
 import { QueryClient, useQueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 
@@ -10,7 +11,7 @@ import { Dream } from "../model/Vimeo";
 import styles from "../styles/Home.module.css";
 import { apiGetAmbassadorDreams, apiGetDreams } from "../utilities/api/videos";
 
-const Home: React.FC = () => {
+const Home: FC = () => {
   const queryClient = useQueryClient();
   const featuredVideos = queryClient.getQueryData<Dream[]>("ambassadorDreams");
   const videos = queryClient.getQueryData<Dream[]>("dreams");
