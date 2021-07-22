@@ -18,6 +18,7 @@ type Props = {
 };
 
 const DreamVideo: FC<Props> = ({ onSelect, video, onSaveVideo }) => {
+  const [failed, setFailed] = useState("");
   const config: MediaRecorderHookOptions = {
     mediaStreamConstraints: { audio: true, video: { width: 320, height: 480 } },
     blobOptions: video || [],
@@ -38,7 +39,9 @@ const DreamVideo: FC<Props> = ({ onSelect, video, onSaveVideo }) => {
   React.useEffect(() => {
     console.log("status", status);
     if (video) return;
-    getMediaStream();
+    getMediaStream()
+      .then((res) => console.log("getMediaStream res", res))
+      .catch((error) => console.log("ERROR useState", error));
   }, []);
 
   return (

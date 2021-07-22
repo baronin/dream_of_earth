@@ -17,7 +17,7 @@ const Home: React.FC = () => {
   const videos = queryClient.getQueryData<Dream[]>("dreams");
 
   return (
-    <div className={css.appBg}>
+    <div className={css.app}>
       <Header />
       <main>
         <Hero />

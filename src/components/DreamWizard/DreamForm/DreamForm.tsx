@@ -29,33 +29,41 @@ const DreamForm: FC<PropsWizard> = ({ dreamContent, videoDream, categories }) =>
     categories: categoriesId,
   };
   // Пример отправки POST запроса:
+  const configVimeo = {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      Accept: "application/vnd.vimeo.*+json;version=3.4",
+    },
+    body: JSON.stringify({
+      upload: {
+        approach: "tus",
+        size: videoDream?.size.toString(),
+      },
+    }),
+  };
+
   async function postData(url = "") {
     // Default options are marked with *
-    const response = await fetch(url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-        Accept: "application/vnd.vimeo.*+json;version=3.4",
-      },
-      body: JSON.stringify({
-        upload: {
-          approach: "tus",
-          size: videoDream?.size.toString(),
-        },
-      }),
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
+    if (!videoDream) {
+      throw new Error("Dont have a video");
+    }
+    try {
+      const response = await fetch(url, configVimeo);
+      const json = await response.json();
+    } catch (error) {
+      console.log("Error post data for vimeo", error);
+    }
   }
 
   const sendForm = async () => {
+    await postData("https://api.vimeo.com/me/videos");
     // postData("https://api.vimeo.com/me/videos").then((data) => {
     //   // data.upload.upload_link;
     //   console.log(data); // JSON data parsed by `response.json()` call
     // });
     // await create(dataForm);
-    console.log(await postData("https://api.vimeo.com/me/videos"));
-    console.log(dataForm);
   };
 
   const handleChangeCounty = (event: ChangeEvent<HTMLSelectElement>) => {
