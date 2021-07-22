@@ -70,11 +70,7 @@ const DreamVideo: FC<Props> = ({ onSelect, video, onSaveVideo }) => {
         )}
 
         {status === "recording" && (
-          <button
-            type="button"
-            onClick={stopRecording}
-            className={`${css.recordVideo} ${css.endRecord}`}
-          >
+          <button type="button" onClick={stopRecording} className={`${css.recordVideo} ${css.endRecord}`}>
             <span />
             End recording
           </button>

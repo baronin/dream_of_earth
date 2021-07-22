@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { FC } from "react";
+import React from "react";
 import { QueryClient, useQueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 
@@ -8,16 +8,16 @@ import Hero from "../components/Hero";
 import TopUsers from "../components/TopUsers";
 import UserList from "../components/UserList/UserList";
 import { Dream } from "../model/Vimeo";
-import styles from "../styles/Home.module.css";
+import css from "../styles/Home.module.css";
 import { apiGetAmbassadorDreams, apiGetDreams } from "../utilities/api/videos";
 
-const Home: FC = () => {
+const Home: React.FC = () => {
   const queryClient = useQueryClient();
   const featuredVideos = queryClient.getQueryData<Dream[]>("ambassadorDreams");
   const videos = queryClient.getQueryData<Dream[]>("dreams");
 
   return (
-    <div className={styles.app}>
+    <div className={css.appBg}>
       <Header />
       <main>
         <Hero />

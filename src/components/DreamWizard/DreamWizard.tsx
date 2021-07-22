@@ -52,7 +52,9 @@ const DreamWizard: React.FC = () => {
       {step === 3 && type === "Video" && (
         <DreamVideo onSelect={onSetVideoDream} video={videoDream} onSaveVideo={onSaveVideo} />
       )}
-      {step === 4 && <DreamForm dreamContent={videoDream || textDream} categories={categories} />}
+      {step === 4 && (
+        <DreamForm dreamContent={"videoDream" || textDream} videoDream={videoDream} categories={categories} />
+      )}
     </article>
   );
 };

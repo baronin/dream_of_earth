@@ -1,18 +1,19 @@
 import React, { ChangeEvent, FC, useState } from "react";
 
 import { DreamCategory } from "../../../../@types/dreamCategory";
-import { DreamData } from "../../../../@types/DreamData";
+import { DreamData } from "../../../../@types/dreamData";
 import countries from "../../../mock/countries";
 import css from "./DreamForm.module.css";
 
 type PropsWizard = {
   dreamContent: string;
+  videoDream: Blob | null;
   categories: DreamCategory[];
 };
 
 const ACCESS_TOKEN = "45392dc057322eff77f2ea349edb606f";
 
-const DreamForm: FC<PropsWizard> = ({ dreamContent, categories }) => {
+const DreamForm: FC<PropsWizard> = ({ dreamContent, videoDream, categories }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [country, setCountry] = useState("Sweden");
@@ -53,6 +54,7 @@ const DreamForm: FC<PropsWizard> = ({ dreamContent, categories }) => {
     //   console.log(data); // JSON data parsed by `response.json()` call
     // });
     // await create(dataForm);
+    console.log(await postData("https://api.vimeo.com/me/videos"));
     console.log(dataForm);
   };
 
