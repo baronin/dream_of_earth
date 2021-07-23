@@ -11,7 +11,8 @@ type PropsWizard = {
   categories: DreamCategory[];
 };
 
-const ACCESS_TOKEN = "45392dc057322eff77f2ea349edb606f";
+// const ACCESS_TOKEN = "45392dc057322eff77f2ea349edb606f"; bloodyave+v1@gmail.com
+const ACCESS_TOKEN = "47eb604b883b7693c7a80131f18d4d10"; // yaroslav.baronin@outlook.com
 
 const DreamForm: FC<PropsWizard> = ({ dreamContent, videoDream, categories }) => {
   const [fullName, setFullName] = useState("");
@@ -29,20 +30,6 @@ const DreamForm: FC<PropsWizard> = ({ dreamContent, videoDream, categories }) =>
     categories: categoriesId,
   };
   // Пример отправки POST запроса:
-  const configVimeo = {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      Accept: "application/vnd.vimeo.*+json;version=3.4",
-    },
-    body: JSON.stringify({
-      upload: {
-        approach: "tus",
-        size: videoDream?.size.toString(),
-      },
-    }),
-  };
 
   async function postData(url = "") {
     // Default options are marked with *
@@ -50,15 +37,72 @@ const DreamForm: FC<PropsWizard> = ({ dreamContent, videoDream, categories }) =>
       throw new Error("Dont have a video");
     }
     try {
-      const response = await fetch(url, configVimeo);
-      const json = await response.json();
+      const response = await fetch(url, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          Accept: "application/vnd.vimeo.*+json;version=3.4",
+        },
+        body: JSON.stringify({
+          upload: {
+            approach: "tus",
+            size: videoDream?.size.toString(),
+          },
+        }),
+      });
+      console.log("postData response", response);
+      return response.json();
     } catch (error) {
       console.log("Error post data for vimeo", error);
+      throw error;
     }
   }
 
+  async function uploadVideo(url = "") {
+    try {
+      const res = await fetch(url, {
+        method: "PATCH", // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          "Tus-Resumable": "1.0.0",
+          "Upload-Offset": "0",
+          "Content-Type": "application/offset+octet-stream",
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          Accept: "application/vnd.vimeo.*+json;version=3.4",
+        },
+        body: videoDream,
+      });
+      console.log("uploadVideo", res);
+    } catch (error) {
+      console.log("Error post data for vimeo", error);
+      throw error;
+    }
+  }
+
+  async function progress(url = "") {
+    try {
+      const res = await fetch(url, {
+        method: "HEAD",
+        headers: {
+          "Tus-Resumable": "1.0.0",
+          Accept: "application/vnd.vimeo.*+json;version=3.4",
+        },
+      });
+      console.log("progress", res);
+    } catch (error) {
+      console.log("Error progress vimeo", error);
+      throw error;
+    }
+  }
   const sendForm = async () => {
-    await postData("https://api.vimeo.com/me/videos");
+    console.log("sendForm");
+    const postVideo = await postData("https://api.vimeo.com/me/videos");
+    const uploadLink = await postVideo.upload.upload_link;
+    console.log("uploadLink", uploadLink);
+    if (uploadLink) {
+      await uploadVideo(uploadLink);
+      await progress(uploadLink);
+    }
     // postData("https://api.vimeo.com/me/videos").then((data) => {
     //   // data.upload.upload_link;
     //   console.log(data); // JSON data parsed by `response.json()` call
