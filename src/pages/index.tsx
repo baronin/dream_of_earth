@@ -1,8 +1,10 @@
 import { GetServerSideProps } from "next";
-import React from "react";
+import Head from "next/head";
+import React, { useEffect } from "react";
 import { QueryClient, useQueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 
+import { getUserId } from "../api/uploadVideo";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import TopUsers from "../components/TopUsers";
@@ -15,9 +17,19 @@ const Home: React.FC = () => {
   const queryClient = useQueryClient();
   const featuredVideos = queryClient.getQueryData<Dream[]>("ambassadorDreams");
   const videos = queryClient.getQueryData<Dream[]>("dreams");
-
+  useEffect(() => {
+    const getUserVideoId = async () => {
+      const getId = await getUserId();
+      console.log(getId);
+    };
+    getUserVideoId();
+  }, []);
   return (
     <div className={css.app}>
+      <Head>
+        <title>My page title</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <Header />
       <main>
         <Hero />
