@@ -1,0 +1,33 @@
+.bg {
+  padding: 30px;
+  background-color: black;
+  border-radius: 10px;
+}
+
+.input {
+  padding: 14px;
+  color: white;
+  font-size: 18px;
+  font-weight: 400;
+  background: #3D3D3D;
+  border: none;
+  border-radius: 7px;
+}
+
+.input::placeholder {
+  color: white;
+}
+
+.btnSendForm {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 15px 20px;
+  background: linear-gradient(93.93deg, #8F00FF 0%, #3625A3 83.13%, #862B88 106.41%);
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+}
+
+.btnSendForm:hover {
+  background: linear-gradient(-93.93deg, #862B88 106.41%,#3625A3 83.13%, #8F00FF 0%);
+}
