@@ -1,4 +1,4 @@
-/* DreamMessage */
+/* DreamSelect */
 .selectDreamTypeWrap {
   display: flex;
   justify-content: center;
@@ -25,7 +25,7 @@
 .selectDreamTypeWrap svg {
   margin-bottom: 20px;
 }
-/* END DreamMessage */
+/* END DreamSelect */
 
 /* steps in DreamWizard */
 .step {

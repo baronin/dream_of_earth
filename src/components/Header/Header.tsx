@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { FunctionComponent} from "react";
+import React, { FunctionComponent } from "react";
 
 import css from "./Header.module.css";
 

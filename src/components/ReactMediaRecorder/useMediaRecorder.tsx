@@ -159,7 +159,7 @@ export function useMediaRecorder({
       mediaRecorder.current = null;
       clearMediaStream();
     } else {
-      console.error("FCK stopRecording");
+      console.error("stopRecording");
     }
   }
 
@@ -233,7 +233,6 @@ export type PlayerProps = {
 };
 
 export function Player({ blob }: PlayerProps) {
-  console.log("Player blob", blob);
   if (!blob) {
     return null;
   }
