@@ -23,16 +23,8 @@ const Hero = () => {
         </div>
         <div className={css.heroEarth} />
       </div>
-      {/* <Modal active={isOpen} setActive={setIsOpen}>
-        <form action="">
-          <input className={css.inputNameDream} type="text" placeholder="text" />
-        </form>
-        <h3>Something about Dream for Earth</h3>
-        <p>Deploy offline this discussion for product launch the right info at the right time to the right people.
-          Cloud strategy killing it we need distributors to evangelize the new line to local markets, for exposing new.</p>
-      </Modal> */}
       <Modal active={isOpen} setActive={setIsOpen}>
-        <DreamWizard />
+        <DreamWizard closeModal={() => setIsOpen(false)} />
       </Modal>
     </section>
   );

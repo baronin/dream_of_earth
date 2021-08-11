@@ -2,7 +2,8 @@
     position: relative;
     top: -80px;
     display: flex;
-    min-height: 920px;
+    min-height: 650px;
+    height: 100vh;
 }
 
 .hero:after {

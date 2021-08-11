@@ -9,7 +9,11 @@ import DreamVideo from "./DreamVideo";
 import DreamApproval from "./DreamApproval";
 import css from "./DreamWizard.module.css";
 
-const DreamWizard: React.FC = () => {
+type Props = {
+  closeModal: () => void,
+};
+
+const DreamWizard: React.FC<Props> = ({ closeModal }) => {
   const [step, setStep] = useState(1);
   const [type, setType] = useState<"Text" | "Video">("Text");
   const [categories, setCategories] = useState<DreamCategoryType[]>([]);
@@ -39,6 +43,14 @@ const DreamWizard: React.FC = () => {
     setStep(step + 1);
   };
 
+  const resetForm = () => {
+    setStep(1);
+    setCategories([]);
+    setTextDream("");
+    setVideoDream(null);
+    closeModal();
+  };
+
   return (
     <article>
       <div className={css.step}>
@@ -65,7 +77,7 @@ const DreamWizard: React.FC = () => {
           onApproval={onApproval}
         />
       )}
-      {step === 5 && <DreamApproval />}
+      {step === 5 && <DreamApproval resetForm={resetForm} />}
     </article>
   );
 };
