@@ -6,6 +6,7 @@ import DreamForm from "./DreamForm/DreamForm";
 import DreamSelect from "./DreamSelect";
 import DreamText from "./DreamText";
 import DreamVideo from "./DreamVideo";
+import DreamApproval from "./DreamApproval";
 import css from "./DreamWizard.module.css";
 
 const DreamWizard: React.FC = () => {
@@ -34,6 +35,10 @@ const DreamWizard: React.FC = () => {
     setStep(step + 1);
   };
 
+  const onApproval = () => {
+    setStep(step + 1);
+  };
+
   return (
     <article>
       <div className={css.step}>
@@ -53,8 +58,14 @@ const DreamWizard: React.FC = () => {
         <DreamVideo onSelect={onSetVideoDream} video={videoDream} onSaveVideo={onSaveVideo} />
       )}
       {step === 4 && (
-        <DreamForm dreamContent={"videoDream" || textDream} videoDream={videoDream} categories={categories} />
+        <DreamForm
+          dreamContent={videoDream || textDream}
+          videoDream={videoDream}
+          categories={categories}
+          onApproval={onApproval}
+        />
       )}
+      {step === 5 && <DreamApproval />}
     </article>
   );
 };

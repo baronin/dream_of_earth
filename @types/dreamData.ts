@@ -6,6 +6,6 @@ export type DreamData = {
   email: string;
   country: { name: string } | string;
   acceptPrivacy: boolean;
-  dreamContent: string;
+  dreamContent: Blob | null | string;
   categories: DreamCategory[] | string[];
 };
