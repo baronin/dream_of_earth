@@ -179,6 +179,7 @@ export function useMediaRecorder({
     }
 
     if (mediaRecorderOptions && mediaRecorderOptions.mimeType) {
+      // @ts-ignore
       if (!MediaRecorder.isTypeSupported(mediaRecorderOptions.mimeType)) {
         console.error(`The specified MIME type supplied to MediaRecorder is not supported by this browser.`);
       }

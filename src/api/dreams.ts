@@ -7,25 +7,30 @@ export const create = async (dream: Omit<DreamData, "id">) => {
 };
 
 export const readDreams = async () => {
-  const snapshot = await firebase.firestore().collection("dreams").get();
-  // @ts-ignore I don't have idea how it fix
-  return snapshot.docs.map<DreamData>((doc) => {
-    const data = doc.data();
-    const categoriesDream = data.categories.map((id: string) => {
-      const category = categories.find((item) => item.id === id);
-      return category;
+  try {
+    const snapshot = await firebase.firestore().collection("dreams").get();
+    // @ts-ignore TODO I don't have idea how it fix
+    return snapshot.docs.map<DreamData>((doc) => {
+      const data = doc.data();
+      const categoriesDream = data.categories.map((id: string) => {
+        const category = categories.find((item) => item.id === id);
+        return category;
+      });
+      return {
+        id: doc.id,
+        fullName: data.fullName,
+        email: data.email,
+        country: data.country,
+        acceptPrivacy: data.acceptPrivacy,
+        videoDream: data.videoDream,
+        textDream: data.textDream,
+        categories: categoriesDream,
+      };
     });
-    return {
-      id: doc.id,
-      fullName: data.fullName,
-      email: data.email,
-      country: data.country,
-      acceptPrivacy: data.acceptPrivacy,
-      videoDream: data.videoDream,
-      textDream: data.textDream,
-      categories: categoriesDream,
-    };
-  });
+  } catch (error) {
+    console.log("error", error.message);
+    return error.message;
+  }
 };
 
 export const deleteDream = async (id: string) => {
