@@ -9,14 +9,9 @@ const TopUsers = () => {
   const [dreams, setDreams] = useState<DreamData[]>([]);
   useEffect(() => {
     const getDreams = async () => {
-      try {
-        const loadedDreams = await readDreams();
-        setDreams(loadedDreams);
-      } catch (error) {
-        console.log("error", error);
-      }
+      const loadedDreams = await readDreams();
+      setDreams(loadedDreams);
     };
-
     getDreams();
   }, []);
 

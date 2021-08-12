@@ -2,6 +2,7 @@ import React, { ChangeEvent, FC, useState } from "react";
 
 import { DreamCategory } from "../../../../@types/dreamCategory";
 import { DreamData } from "../../../../@types/dreamData";
+import uploadedVideo from "../../../api/uploadVideo";
 import countries from "../../../mock/countries";
 import css from "./DreamForm.module.css";
 
@@ -11,8 +12,6 @@ type PropsWizard = {
   categories: DreamCategory[];
   onApproval: () => void;
 };
-
-const ACCESS_TOKEN = "45392dc057322eff77f2ea349edb606f";
 
 const DreamForm: FC<PropsWizard> = ({ dreamContent, videoDream, categories, onApproval }) => {
   const [fullName, setFullName] = useState("");
@@ -31,53 +30,21 @@ const DreamForm: FC<PropsWizard> = ({ dreamContent, videoDream, categories, onAp
     categories: categoriesId,
   };
 
-  const configVimeo = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      Accept: "application/vnd.vimeo.*+json;version=3.4",
-    },
-    body: JSON.stringify({
-      upload: {
-        approach: "tus",
-        size: videoDream?.size.toString(),
-      },
-    }),
-  };
-
-  async function postData(url = "") {
-    // Default options are marked with *
-    if (!dreamContent) {
-      throw new Error("Dont have a video");
-    }
-    try {
-      const response = await fetch(url, configVimeo);
-      const json = await response.json();
-    } catch (error) {
-      setErrorMessage(error.message);
-    }
-  }
-
   const sendForm = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     console.log("errorMessage", errorMessage);
     console.log("dataForm", dataForm);
-    if (typeof dreamContent !== "string") {
-      console.log("string", dreamContent);
-      await postData("https://api.vimeo.com/me/videos");
+    if (typeof dreamContent === "object") {
+      const uplVideoLink = await uploadedVideo(videoDream);
+      console.log("uplVideoLink", uplVideoLink);
     }
+
     onApproval();
-    // postData("https://api.vimeo.com/me/videos").then((data) => {
-    //   // data.upload.upload_link;
-    //   console.log(data); // JSON data parsed by `response.json()` call
-    // });
-    // await create(dataForm);
+    // await create(dataForm); TODO create in firebase
   };
 
   const handleChangeCounty = (event: ChangeEvent<HTMLSelectElement>) => {
     setCountry(event.target.value);
-    console.log("defaultCountry", country);
   };
 
   return (

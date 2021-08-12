@@ -10,8 +10,6 @@ type DreamType = {
 };
 
 const UserCard: FC<DreamType> = ({ dream, onRemove }) => {
-  // console.log("dream", dream);
-
   return (
     <div className={css.userCart}>
       <Link href="#">

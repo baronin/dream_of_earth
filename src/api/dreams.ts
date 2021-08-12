@@ -7,30 +7,27 @@ export const create = async (dream: Omit<DreamData, "id">) => {
 };
 
 export const readDreams = async () => {
-  try {
-    const snapshot = await firebase.firestore().collection("dreams").get();
-    // @ts-ignore TODO I don't have idea how it fix
-    return snapshot.docs.map<DreamData>((doc) => {
-      const data = doc.data();
-      const categoriesDream = data.categories.map((id: string) => {
-        const category = categories.find((item) => item.id === id);
-        return category;
-      });
-      return {
-        id: doc.id,
-        fullName: data.fullName,
-        email: data.email,
-        country: data.country,
-        acceptPrivacy: data.acceptPrivacy,
-        videoDream: data.videoDream,
-        textDream: data.textDream,
-        categories: categoriesDream,
-      };
+  const snapshot = await firebase.firestore().collection("dreams").get();
+  console.log('readDreams')
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore TODO I don't have idea how it fix
+  return snapshot.docs.map<DreamData>((doc) => {
+    const data = doc.data();
+    const categoriesDream = data.categories.map((id: string) => {
+      const category = categories.find((item) => item.id === id);
+      return category;
     });
-  } catch (error) {
-    console.log("error", error.message);
-    return error.message;
-  }
+    return {
+      id: doc.id,
+      fullName: data.fullName,
+      email: data.email,
+      country: data.country,
+      acceptPrivacy: data.acceptPrivacy,
+      videoDream: data.videoDream,
+      textDream: data.textDream,
+      categories: categoriesDream,
+    };
+  });
 };
 
 export const deleteDream = async (id: string) => {
