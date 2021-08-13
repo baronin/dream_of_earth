@@ -21,9 +21,7 @@ const UserList = () => {
           </select>
         </div>
       </div>
-      <div>
-        <UserCard />
-      </div>
+      <div>usercard {/*<UserCard />*/}</div>
     </div>
   );
 };

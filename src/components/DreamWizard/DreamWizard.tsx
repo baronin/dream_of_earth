@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
 import { DreamCategory as DreamCategoryType } from "../../../@types/dreamCategory";
+import DreamApproval from "./DreamApproval";
 import DreamCategory from "./DreamCategory";
 import DreamForm from "./DreamForm/DreamForm";
 import DreamSelect from "./DreamSelect";
 import DreamText from "./DreamText";
 import DreamVideo from "./DreamVideo";
-import DreamApproval from "./DreamApproval";
 import css from "./DreamWizard.module.css";
 
 type Props = {
-  closeModal: () => void,
+  closeModal: () => void;
 };
 
 const DreamWizard: React.FC<Props> = ({ closeModal }) => {

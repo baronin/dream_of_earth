@@ -8,7 +8,9 @@ export const create = async (dream: Omit<DreamData, "id">) => {
 
 export const readDreams = async () => {
   const snapshot = await firebase.firestore().collection("dreams").get();
-  // @ts-ignore I don't have idea how it fix
+  console.log('readDreams')
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore TODO I don't have idea how it fix
   return snapshot.docs.map<DreamData>((doc) => {
     const data = doc.data();
     const categoriesDream = data.categories.map((id: string) => {
