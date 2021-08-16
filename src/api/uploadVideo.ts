@@ -72,21 +72,19 @@ const uploadedVideo = async (video: Blob | null) => {
   return linkVideo;
 };
 
-export const getUserId = async (id: string) => {
+export const videosUserHasUploaded = async () => {
   try {
-    const res = await fetch(`https://api.vimeo.com/users/${id}`, {
+    const response = await fetch("https://api.vimeo.com/me/videos", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-        Accept: "application/vnd.vimeo.*+json;version=3.4",
+        Authorization: `bearer ${ACCESS_TOKEN}`,
+        Accept: " application/vnd.vimeo.user+json;version=3.0,application/vnd.vimeo.video+json;version=3.4",
       },
     });
-    console.log("getUserId", getUserId);
-    return res;
+    return await response.json();
   } catch (err) {
-    console.log(err);
-    throw err;
+    throw Error(`Response error${err.message}`);
   }
 };
 
