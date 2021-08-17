@@ -8,20 +8,23 @@ import { deleteDream, readDreams } from "../api/dreams";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import TopUsers from "../components/TopUsers";
+import topUserCss from "../components/TopUsers/TopUsers.module.css";
 import UserCard from "../components/UserCard";
 import UserList from "../components/UserList/UserList";
 import { Dream } from "../model/Vimeo";
 import css from "../styles/Home.module.css";
-import topUserCss from "../components/TopUsers/TopUsers.module.css";
-
 import { apiGetAmbassadorDreams, apiGetDreams } from "../utilities/api/videos";
+import DreamWizard from "../components/DreamWizard/DreamWizard";
+import Modal from "../components/Modal";
 
 const Home: React.FC = () => {
   const queryClient = useQueryClient();
   const featuredVideos = queryClient.getQueryData<Dream[]>("ambassadorDreams");
   const videos = queryClient.getQueryData<Dream[]>("dreams");
-
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [topPeopleDreams, setTopPeopleDreams] = useState<DreamData[]>([]);
+
+  const handleToggleModal = () => setIsOpen(!isOpen);
   useEffect(() => {
     const getDreams = async () => {
       const loadedDreams = await readDreams();
@@ -38,7 +41,7 @@ const Home: React.FC = () => {
     <div className={css.app}>
       <Header />
       <main>
-        <Hero />
+        <Hero isToggleModal={handleToggleModal} />
         {topPeopleDreams.length > 0 && (
           <section className="TopPeople">
             <div className="container">
@@ -52,7 +55,7 @@ const Home: React.FC = () => {
           </section>
         )}
 
-        {/* <TopUsers />*/}
+        {/* <TopUsers /> */}
         {/* <UserList /> */}
         {/* <p>{featuredVideos?.[0].id}</p> */}
         {/* <p>{featuredVideos?.[0].sentBy}</p> */}
@@ -62,6 +65,9 @@ const Home: React.FC = () => {
       <footer>
         <p>© 2021 Dream for Earth </p>
       </footer>
+      <Modal active={isOpen} setActive={setIsOpen}>
+        <DreamWizard closeModal={() => setIsOpen(false)} />
+      </Modal>
     </div>
   );
 };
