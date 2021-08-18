@@ -24,7 +24,7 @@ const Header: FunctionComponent = () => {
           <Link href="#">
             <a className={css.headerShareLink}>Share your dream</a>
           </Link>
-          <Link href="#">
+          <Link href="/login">
             <a className={css.headerShareLink}>Login</a>
           </Link>
         </div>
