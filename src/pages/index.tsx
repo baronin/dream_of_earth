@@ -1,21 +1,20 @@
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { QueryClient, useQueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 
 import { DreamData } from "../../@types/dreamData";
 import { deleteDream, readDreams } from "../api/dreams";
+import DreamWizard from "../components/DreamWizard/DreamWizard";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
-import TopUsers from "../components/TopUsers";
+import Modal from "../components/Modal";
 import topUserCss from "../components/TopUsers/TopUsers.module.css";
 import UserCard from "../components/UserCard";
-import UserList from "../components/UserList/UserList";
 import { Dream } from "../model/Vimeo";
 import css from "../styles/Home.module.css";
 import { apiGetAmbassadorDreams, apiGetDreams } from "../utilities/api/videos";
-import DreamWizard from "../components/DreamWizard/DreamWizard";
-import Modal from "../components/Modal";
 
 const Home: React.FC = () => {
   const queryClient = useQueryClient();
@@ -39,6 +38,16 @@ const Home: React.FC = () => {
   };
   return (
     <div className={css.app}>
+      <Head>
+        <title>My page title</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossOrigin="anonymous"
+        />
+      </Head>
       <Header />
       <main>
         <Hero isToggleModal={handleToggleModal} />
