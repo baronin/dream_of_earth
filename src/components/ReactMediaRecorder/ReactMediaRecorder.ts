@@ -1,57 +1,12 @@
-import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-export type ReactMediaRecorderRenderProps = {
-  error: string;
-  muteAudio: () => void;
-  unMuteAudio: () => void;
-  startRecording: () => void;
-  pauseRecording: () => void;
-  resumeRecording: () => void;
-  stopRecording: () => void;
-  mediaBlobUrl: string | null;
-  status: StatusMessages;
-  isAudioMuted: boolean;
-  previewStream: MediaStream | null;
-  clearBlobUrl: () => void;
-};
-
-export type ReactMediaRecorderHookProps = {
-  audio?: boolean | MediaTrackConstraints;
-  video?: boolean | MediaTrackConstraints;
-  screen?: boolean;
-  onStop?: (blobUrl: string, blob: Blob) => void;
-  blobPropertyBag?: BlobPropertyBag;
-  mediaRecorderOptions?: MediaRecorderOptions | null;
-};
-export type ReactMediaRecorderProps = ReactMediaRecorderHookProps & {
-  render: (props: ReactMediaRecorderRenderProps) => ReactElement;
-};
-
-export type StatusMessages =
-  | "media_aborted"
-  | "permission_denied"
-  | "no_specified_media_found"
-  | "media_in_use"
-  | "invalid_media_constraints"
-  | "no_constraints"
-  | "recorder_error"
-  | "idle"
-  | "acquiring_media"
-  | "delayed_start"
-  | "recording"
-  | "stopping"
-  | "stopped";
-
-export enum RecorderErrors {
-  AbortError = "media_aborted",
-  NotAllowedError = "permission_denied",
-  NotFoundError = "no_specified_media_found",
-  NotReadableError = "media_in_use",
-  OverconstrainedError = "invalid_media_constraints",
-  TypeError = "no_constraints",
-  NONE = "",
-  NO_RECORDER = "recorder_error",
-}
+import {
+  ReactMediaRecorderHookProps,
+  ReactMediaRecorderProps,
+  ReactMediaRecorderRenderProps,
+  RecorderErrors,
+  StatusMessages,
+} from "../../../@types/ReactMediaRecorder";
 
 export function useReactMediaRecorder({
   audio = true,
@@ -77,6 +32,7 @@ export function useReactMediaRecorder({
     };
     try {
       if (screen) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const stream = (await window.navigator.mediaDevices.getDisplayMedia({
           video: video || true,
@@ -108,6 +64,7 @@ export function useReactMediaRecorder({
     }
 
     if (screen) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (!window.navigator.mediaDevices.getDisplayMedia) {
         throw new Error("This browser doesn't support screen capturing");
@@ -191,6 +148,7 @@ export function useReactMediaRecorder({
   const muteAudio = (mute: boolean) => {
     setIsAudioMuted(mute);
     if (mediaStream.current) {
+      // eslint-disable-next-line no-param-reassign,no-return-assign
       mediaStream.current.getAudioTracks().forEach((audioTrack) => (audioTrack.enabled = !mute));
     }
   };
@@ -212,6 +170,7 @@ export function useReactMediaRecorder({
       if (mediaRecorder.current.state !== "inactive") {
         setStatus("stopping");
         mediaRecorder.current.stop();
+        // eslint-disable-next-line no-unused-expressions
         mediaStream.current && mediaStream.current.getTracks().forEach((track) => track.stop());
         mediaChunks.current = [];
       }
