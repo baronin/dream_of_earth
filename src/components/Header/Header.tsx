@@ -7,7 +7,7 @@ const Header: FunctionComponent = () => {
   return (
     <header className={css.header}>
       <div className={`${css.headerContainer} container`}>
-        <Link href="#">
+        <Link href="/">
           <a className={css.header__logoLink}>
             <svg width="136" height="59" viewBox="0 0 136 59" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
