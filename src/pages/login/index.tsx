@@ -1,7 +1,7 @@
 import Head from "next/head";
 
 import Header from "../../components/Header";
-import css from "../../styles/Home.module.css";
+import css from "../../styles/app.module.css";
 import LoginForm from "./components/LoginForm";
 
 const LoginPage = () => {

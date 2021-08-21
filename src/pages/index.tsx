@@ -13,7 +13,7 @@ import Modal from "../components/Modal";
 import topUserCss from "../components/TopUsers/TopUsers.module.css";
 import UserCard from "../components/UserCard";
 import { Dream } from "../model/Vimeo";
-import css from "../styles/Home.module.css";
+import css from "../styles/app.module.css";
 import { apiGetAmbassadorDreams, apiGetDreams } from "../utilities/api/videos";
 
 const Home: React.FC = () => {

@@ -14,17 +14,11 @@ const LoginForm = () => {
   };
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const validationEmail = validate(email, "Error email");
-    if (validationEmail) {
-      setError(validationEmail);
-    } else {
-      setError("");
+    if (!email) {
+      validate(email, "Error email");
     }
-    const validationPassword = validate(password, "Error password");
-    if (validationPassword) {
-      setError(validationPassword);
-    } else {
-      setError("");
+    if (!password) {
+      validate(email, "Error password");
     }
   };
   console.log("submit errors | ", error);
@@ -51,9 +45,9 @@ const LoginForm = () => {
           <FormMessage>test</FormMessage>
         </div>
         <div className="mb-3">
-          <label htmlFor="exampleInputPassword1" className="form-label">
+          <label htmlFor="password" className="form-label">
             Password
-            <input type="password" className="form-control" id="exampleInputPassword1" />
+            <input type="password" className="form-control" id="password" autoComplete={"8888"} />
           </label>
         </div>
         <div className="mb-3 form-check">
