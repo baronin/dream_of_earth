@@ -12,6 +12,7 @@ import Hero from "../components/Hero";
 import Modal from "../components/Modal";
 import topUserCss from "../components/TopUsers/TopUsers.module.css";
 import UserCard from "../components/UserCard";
+import AuthProvider from "../contexts/FirebaseAuth";
 import { Dream } from "../model/Vimeo";
 import css from "../styles/app.module.css";
 import { apiGetAmbassadorDreams, apiGetDreams } from "../utilities/api/videos";
@@ -48,7 +49,9 @@ const Home: React.FC = () => {
           crossOrigin="anonymous"
         />
       </Head>
-      <Header />
+      <AuthProvider>
+        <Header />
+      </AuthProvider>
       <main>
         <Hero isToggleModal={handleToggleModal} />
         {topPeopleDreams.length > 0 && (

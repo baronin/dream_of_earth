@@ -1,35 +1,49 @@
 import { FormEvent, useState } from "react";
 
+import { authComplete } from "../../../api/dreams";
 import FormMessage from "../../../components/FormMessage";
-import validate from "../../../utilities/validate";
+import { useAuth } from "../../../contexts/FirebaseAuth/context";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { signup, currentUser } = useAuth();
 
   const handleEmail = (e: { target: HTMLInputElement }) => {
     const { target } = e;
     setEmail(target.value);
   };
-  const handleSubmit = (e: FormEvent) => {
+  const handlePassword = (e: { target: HTMLInputElement }) => {
+    const { target } = e;
+    setPassword(target.value);
+  };
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!email) {
-      validate(email, "Error email");
+    try {
+      setError("");
+      setLoading(true);
+      await signup(email, password);
+    } catch (err) {
+      setError("Error signup");
+      throw Error(`test error ${err}`);
     }
-    if (!password) {
-      validate(email, "Error password");
-    }
+    setLoading(false);
   };
   console.log("submit errors | ", error);
 
   return (
     <section>
       <h2>Login form</h2>
+      <h3>Error ? {error}</h3>
+      <h4>Current user {currentUser && JSON.stringify(currentUser)}</h4>
+      {loading && <pre>LOADING...</pre>}
       <form onSubmit={handleSubmit} className="mt-5">
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
-            Email address {error}
+            Email address
             <input
               onChange={handleEmail}
               type="email"
@@ -47,7 +61,13 @@ const LoginForm = () => {
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
             Password
-            <input type="password" className="form-control" id="password" autoComplete={"8888"} />
+            <input
+              onChange={handlePassword}
+              type="password"
+              className="form-control"
+              id="password"
+              autoComplete="8888"
+            />
           </label>
         </div>
         <div className="mb-3 form-check">
@@ -56,7 +76,7 @@ const LoginForm = () => {
             Check me out
           </label>
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" disabled={isDisabled}>
           Submit
         </button>
       </form>

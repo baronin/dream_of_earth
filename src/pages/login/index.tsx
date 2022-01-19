@@ -1,8 +1,10 @@
 import Head from "next/head";
 
 import Header from "../../components/Header";
+import AuthProvider from "../../contexts/FirebaseAuth";
 import css from "../../styles/app.module.css";
 import LoginForm from "./components/LoginForm";
+import SignUpForm from "./components/SignUpForm";
 
 const LoginPage = () => {
   return (
@@ -19,7 +21,10 @@ const LoginPage = () => {
       </Head>
       <Header />
       <div className="container">
-        <LoginForm />
+        <AuthProvider>
+          <LoginForm />
+        </AuthProvider>
+        {/* <SignUpForm /> */}
       </div>
     </div>
   );

@@ -13,4 +13,5 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(config);
 }
 
+export const auth = firebase.auth();
 export default firebase;
